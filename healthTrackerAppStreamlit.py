@@ -3,6 +3,7 @@ import pandas as pd
 import mysql.connector
 from datetime import datetime, timedelta
 import numpy as np
+import plotly.express as px
 
 # Database Configuration
 DB_CONFIG = {
@@ -187,6 +188,34 @@ def fetch_last_month_data():
     
     return food_intake, water_intake
 
+def calculate_metrices():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # # Total Agg of all macros per Day Per Meal
+    cursor.execute("""
+        select date,F1.meal_type, SUM(quantity*protein) as total_protein_per_meal, SUM(quantity*fat) as total_fat_per_meal, SUM(quantity*calories) as total_calories_per_meal
+        from food_intake F1
+        join food_items F2 on F1.food_id = F2.id
+        group by date,F1.meal_type
+        """)
+    agg_perDay_perMeal = pd.DataFrame(cursor.fetchall())
+
+    # Total Agg of all macros per Day
+    cursor.execute("""
+        select date, SUM(total_protein_per_meal) as total_protein_per_day, SUM(total_fat_per_meal) as total_fat_per_day, SUM(total_calories_per_meal) as total_calories_per_day
+        from(select date,F1.meal_type, SUM(quantity*protein) as total_protein_per_meal, SUM(quantity*fat) as total_fat_per_meal, SUM(quantity*calories) as total_calories_per_meal
+        from food_intake F1
+        join food_items F2 on F1.food_id = F2.id
+        group by date,F1.meal_type) table1
+        group by date;
+        """)
+    agg_perDay = pd.DataFrame(cursor.fetchall())
+
+    conn.close()
+
+    return agg_perDay_perMeal, agg_perDay
+
 # Food Tab
 class FoodTab:
     def __init__(self, tab_name):
@@ -194,7 +223,7 @@ class FoodTab:
         
         st.subheader(f"Log your food intake")
 
-        self.selected_meal_type = st.selectbox("Select meal type", ["Breakfast","Lunch","Dinner"])
+        self.selected_meal_type = st.selectbox("Select meal type", ["Breakfast","Morning Snacks","Lunch","Evening Snacks","Dinner"])
 
         # Input Fields
 
@@ -228,8 +257,8 @@ class FoodTab:
 
     def delete_last_entry(self):
         if self.date:
-            delete_last_entry(self.date, self.meal_type)
-            st.success(f"Deleted the last {self.meal_type} entry for {self.date}.")
+            delete_last_entry(self.date, self.selected_meal_type)
+            st.success(f"Deleted the last {self.selected_meal_type} entry for {self.date}.")
         else:
             st.warning("Please select a date.")
 
@@ -270,14 +299,10 @@ def main():
     st.title("Health Tracker App")
 
     # Select Tab
-    tab = st.sidebar.selectbox("Choose a Tab", ["Food Intake",  "Water Intake", "View Last 1 Month Data"])
+    tab = st.sidebar.selectbox("Choose a Tab", ["Food Intake",  "Water Intake", "View Last 1 Month Data","Metrices"])
 
     if tab == "Food Intake":
         FoodTab(tab_name="Food Intake")  # Adjust meal type as needed
-    # elif tab == "Food Intake - Lunch":
-    #     FoodTab(tab_name="Food Intake", meal_type="Lunch")
-    # elif tab == "Food Intake - Dinner":
-    #     FoodTab(tab_name="Food Intake", meal_type="Dinner")
     elif tab == "Water Intake":
         WaterIntakeTab()
     elif tab == "View Last 1 Month Data":
@@ -300,6 +325,71 @@ def main():
             st.dataframe(water_intake)
         else:
             st.write("No water intake records found for the last 1 month.")
+
+    elif tab == "Metrices":
+        st.header("View your progress")
+
+        agg_perDay_perMeal,agg_perDay = calculate_metrices()
+
+        st.subheader("agg_perDay_perMeal")
+        st.dataframe(agg_perDay_perMeal)
+
+        st.subheader("agg_perDay")
+        st.dataframe(agg_perDay)
+
+        # Streamlit App
+        st.title("Nutritional Data Visualization")
+
+        # Sidebar Options
+        st.sidebar.header("Visualization Options")
+        dataset = st.sidebar.selectbox("Choose a dataset:", ["Daily Aggregates", "Meal-wise Aggregates"])
+        chart_type = st.sidebar.selectbox("Choose a chart type:", ["Bar", "Line"])
+
+        if dataset == "Daily Aggregates":
+            st.subheader("Daily Aggregates")
+            metric = st.selectbox("Choose a metric:", ["total_protein_per_day", "total_fat_per_day", "total_calories_per_day"])
+            
+            # Create the appropriate chart
+            if chart_type == "Bar":
+                fig = px.bar(agg_perDay, x="date", y=metric, title=f"{metric} Over Days", labels={"date": "Date", metric: "Value"})
+            elif chart_type == "Line":
+                fig = px.line(agg_perDay, x="date", y=metric, title=f"{metric} Over Days", labels={"date": "Date", metric: "Value"})
+            
+            st.plotly_chart(fig)
+
+        elif dataset == "Meal-wise Aggregates":
+            st.subheader("Meal-wise Aggregates")
+            metric = st.selectbox("Choose a metric:", ["total_protein_per_meal", "total_fat_per_meal", "total_calories_per_meal"])
+            meal_types = st.multiselect("Select meal types to view:", agg_perDay_perMeal["meal_type"].unique(), default=agg_perDay_perMeal["meal_type"].unique())
+            
+            if meal_types:
+                # Filter the DataFrame based on selected meal types
+                filtered_data = agg_perDay_perMeal[agg_perDay_perMeal["meal_type"].isin(meal_types)]
+                
+                # Create the appropriate chart
+                if chart_type == "Bar":
+                    fig = px.bar(
+                        filtered_data,
+                        x="date",
+                        y=metric,
+                        color="meal_type",
+                        title=f"{metric} for Selected Meal Types Over Days",
+                        labels={"date": "Date", metric: "Value"}
+                    )
+                elif chart_type == "Line":
+                    fig = px.line(
+                        filtered_data,
+                        x="date",
+                        y=metric,
+                        color="meal_type",
+                        title=f"{metric} for Selected Meal Types Over Days",
+                        labels={"date": "Date", metric: "Value"}
+                    )
+                
+                st.plotly_chart(fig)
+            else:
+                st.warning("Please select at least one meal type to display the data.")
+
 
 if __name__ == "__main__":
     main()
