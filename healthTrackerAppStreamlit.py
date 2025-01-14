@@ -8,8 +8,8 @@ import plotly.express as px
 # Database Configuration
 DB_CONFIG = {
     "host": "localhost",
-    "port": "3305",
-    "user": "root",
+    "port": "3306",
+    "user": "user",
     "password": "123456",
     "database": "healthtracker",
 }
