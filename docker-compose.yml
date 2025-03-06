@@ -1,0 +1,17 @@
+version: "3.9"  # Specify the Docker Compose version
+services:
+  mysql:
+    image: mysql:8.0  # Use the desired version of MySQL
+    container_name: mysql-container  # Name for the MySQL container
+    restart: always  # Restart policy
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456  # Set the root password
+      MYSQL_DATABASE: healthtracker  # Create a default database
+      MYSQL_USER: user  # Create a user
+      MYSQL_PASSWORD: 123456  # Password for the user
+    ports:
+      - "3306:3306"  # Expose MySQL on localhost:3306
+    volumes:
+      - /Users/spatkar/PycharmProjects/Health_Tracker_Python/MySql_Volume:/var/lib/mysql
+#volumes:
+#  mysql-data:
