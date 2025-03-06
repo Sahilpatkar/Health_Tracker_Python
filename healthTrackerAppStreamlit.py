@@ -6,12 +6,16 @@ import numpy as np
 import plotly.express as px
 
 # Database Configuration
+db_config = st.secrets["database"]
+
+
+
 DB_CONFIG = {
-    "host": "localhost",
-    "port": "3306",
-    "user": "user",
-    "password": "123456",
-    "database": "healthtracker",
+    "host": db_config["host"],
+    "port": db_config["port"],
+    "user": db_config["user"],
+    "password": db_config["password"],
+    "database": db_config["database"],
 }
 
 # Database Connection
