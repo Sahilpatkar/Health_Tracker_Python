@@ -2,7 +2,7 @@ version: "3.9"  # Specify the Docker Compose version
 services:
   mysql:
     image: mysql:8.0  # Use the desired version of MySQL
-    container_name: mysql-container  # Name for the MySQL container
+    container_name: mysql-container-health  # Name for the MySQL container
     restart: always  # Restart policy
     environment:
       MYSQL_ROOT_PASSWORD: 123456  # Set the root password

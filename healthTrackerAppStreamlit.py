@@ -1,13 +1,34 @@
+import asyncio
+import json
+import os
+import shutil
+import tempfile
+import sys
 import streamlit as st
 import pandas as pd
 import mysql.connector
 from datetime import datetime, timedelta
 import numpy as np
 import plotly.express as px
+from dotenv import load_dotenv
+
+from Agents.HealthReport_InformationAgent import extract_context_from_pdf
+from data_to_table import skim_required_parameters
+
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "medical_extractor_project"))
+from medical_extractor_project.main import report_parameters_extractor
+
+load_dotenv()
+from Agents.HealthReportParameterAgent import extract_from_pdf
 
 # Database Configuration
 db_config = st.secrets["database_local"]
 
+os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
+os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
+os.environ["LANGCHAIN_TRACING_V2"]="true"
+os.environ["LANGCHAIN_PROJECT"]="health_monitoring_streamlit"
 
 
 DB_CONFIG = {
@@ -333,6 +354,64 @@ class WaterIntakeTab:
         else:
             st.warning("Please select a date.")
 
+class Health_Report:
+    def __init__(self):
+        st.title("📄 Health-Report PDF Processor")
+
+        # 1) Upload
+        uploaded = st.file_uploader("Upload one PDF", type="pdf")
+        if not uploaded:
+            st.stop()
+
+        # 2) Save to temp dir
+        tmpdir = tempfile.mkdtemp()
+        tmp_path = os.path.join(tmpdir, uploaded.name)
+        with open(tmp_path, "wb") as f:
+            f.write(uploaded.getbuffer())
+        st.info(f"Saved to temporary file: `{tmp_path}`")
+
+        if st.button("🔍 Extract parameters"):
+            with st.spinner("Running AI extraction…"):
+                try:
+                    context = asyncio.run(extract_context_from_pdf(tmpdir))
+                    st.success(f"Extracted Context={context.model_dump()}")
+                    # Note: Streamlit isn’t async, so use asyncio.run
+                    #params = asyncio.run(extract_from_pdf(tmpdir))
+                    #st.success(f"Extracted {len(params)} parameters")
+                    # show them
+                    # for p in params:
+                    #     st.write(p)
+
+                    params_new = report_parameters_extractor(tmp_path,"")
+
+                    # raw_out_path = f"HealthReport/{st.session_state.username}/raw_report/report_{context.name}_{context.date}.json"
+                    # raw_dir_name = os.path.dirname(raw_out_path)
+                    # os.makedirs(raw_dir_name, exist_ok=True)
+                    #
+                    # ResponseDict = {"context": context.model_dump(), "params": params}
+                    # #print(ResponseDict)
+                    # with open(raw_out_path, "w") as f:
+                    #     json.dump(ResponseDict, f, indent=4)
+
+
+                    processed_out_path = f"HealthReport/{st.session_state.username}/processed_report/{context.date}/report_{context.name}_{context.date}.json"
+                    processed_dir_name = os.path.dirname(processed_out_path)
+                    os.makedirs(processed_dir_name, exist_ok=True)
+                    processed_parameter_dict = {"context": context.model_dump(),
+                                                "params": params_new}
+                    with open(processed_out_path, "w") as f:
+                        json.dump(processed_parameter_dict, f, indent=4)
+
+                except Exception as e:
+                    st.error(f"Extraction failed: {e}")
+                    st.stop()
+
+                # 4) Move PDF to your permanent datastore
+            datastore_dir = "./datastore"
+            os.makedirs(datastore_dir, exist_ok=True)
+            dest = os.path.join(datastore_dir, uploaded.name)
+            shutil.move(tmp_path, dest)
+            st.success(f"Moved PDF to datastore: `{dest}`")
 
 
 def Register(user, password, role):
@@ -418,7 +497,7 @@ def main():
 
 
         # Select Tab
-        tab = st.sidebar.selectbox("Choose a Tab", ["Food Intake",  "Water Intake", "View Last 1 Month Data","Metrices"])
+        tab = st.sidebar.selectbox("Choose a Tab", ["Food Intake",  "Water Intake", "View Last 1 Month Data","Metrices","Health_Report"])
 
         if tab == "Food Intake":
             FoodTab(tab_name="Food Intake")  # Adjust meal type as needed
@@ -509,6 +588,7 @@ def main():
                 else:
                     st.warning("Please select at least one meal type to display the data.")
 
-
+        elif tab == "Health_Report":
+            Health_Report()
 if __name__ == "__main__":
     main()
