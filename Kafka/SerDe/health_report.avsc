@@ -1,0 +1,48 @@
+{
+  "namespace": "com.health.report",
+  "type": "record",
+  "name": "HealthReport",
+  "fields": [
+    {
+      "name": "user",
+      "type": "string"
+    },
+    {
+      "name": "context",
+      "type": {
+        "type": "record",
+        "name": "Context",
+        "fields": [
+          { "name": "name", "type": "string" },
+          { "name": "date", "type": "string" },
+          { "name": "gender", "type": "string" },
+          { "name": "location", "type": "string" }
+        ]
+      }
+    },
+    {
+      "name": "params",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "record",
+          "name": "Parameter",
+          "fields": [
+            {
+              "name": "value",
+              "type": "string"
+            },
+            {
+              "name": "unit",
+              "type": "string"
+            },
+            {
+              "name": "remark",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
