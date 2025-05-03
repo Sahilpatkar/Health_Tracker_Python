@@ -23,6 +23,7 @@ class ExtractedParameter(BaseModel):
 
 # Function to extract structured value using LLM
 def extract_with_llm(text_chunk: str, parameter_name: str) -> ExtractedParameter:
+
     prompt = f"""
 Given the text:
 
@@ -31,13 +32,16 @@ Given the text:
 Extract value, unit, and any remark for the parameter "{parameter_name}".
 Return JSON like: {{"value": ..., "unit": "...", "remark": "..."}}
 """
+
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
     )
 
+
     raw_response = response.choices[0].message.content.strip()
     logging.info(f"Raw LLM extractor Response: {raw_response}")
+
 
     parsed_json = safe_json_loads(raw_response)
 
@@ -69,3 +73,4 @@ Return JSON like: {{"value": ..., "unit": "...", "remark": "..."}}
 #     logging.info(f"Raw LLM extractor Response: {raw_response}")
 #
 #     return safe_json_loads(raw_response)
+

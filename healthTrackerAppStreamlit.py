@@ -12,17 +12,21 @@ import numpy as np
 import plotly.express as px
 from dotenv import load_dotenv
 
+
 from Kafka.kafka_producer_avro import send_to_kafka_avro
 from medical_extractor_project.utils.logger import setup_logger
 import logging
 from Agents.HealthReport_InformationAgent import extract_context_from_pdf
 from Kafka.kafka_producer import send_to_kafka
+
 from data_to_table import skim_required_parameters
 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "medical_extractor_project"))
 from medical_extractor_project.main import report_parameters_extractor
+
 setup_logger()
+
 load_dotenv()
 from Agents.HealthReportParameterAgent import extract_from_pdf
 
@@ -396,6 +400,7 @@ class Health_Report:
                     # #print(ResponseDict)
                     # with open(raw_out_path, "w") as f:
                     #     json.dump(ResponseDict, f, indent=4)
+
 
                     context.model_dump()["user"] = st.session_state.username
 
