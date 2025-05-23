@@ -1,0 +1,335 @@
+{
+  "context": {
+    "patient": "Sasha",
+    "date": "27/04/2025"
+  },
+  "Data": {
+    "Hemoglobin (Hb)": {
+      "value": 15,
+      "unit": "g/dL"
+    },
+    "Total Leucocytes (WBC) count": {
+      "value": 7000,
+      "unit": "/µL"
+    },
+    "Platelet count": {
+      "value": 329000,
+      "unit": "/µL"
+    },
+    "Red blood cell (RBC) count": {
+      "value": 5.25,
+      "unit": "x 10^6 /µL"
+    },
+    "PCV (Packed Cell Volume)": {
+      "value": 45.4,
+      "unit": "%"
+    },
+    "MCV (Mean Corpuscular Volume)": {
+      "value": 86.5,
+      "unit": "fL"
+    },
+    "MCH (Mean Corpuscular Hb)": {
+      "value": 28.5,
+      "unit": "pgms"
+    },
+    "MCHC (Mean Corpuscular Hb Conc.)": {
+      "value": 33,
+      "unit": "g/dL"
+    },
+    "RDW (RBC distribution width)": {
+      "value": 13.4,
+      "unit": "%"
+    },
+    "Neutrophils": {
+      "value": 57,
+      "unit": "%"
+    },
+    "Absolute Neutrophils": {
+      "value": 3990,
+      "unit": "/µL"
+    },
+    "Eosinophils": {
+      "value": 5,
+      "unit": "%"
+    },
+    "Absolute Eosinophils": {
+      "value": 350,
+      "unit": "/µL"
+    },
+    "Basophils": {
+      "value": 0,
+      "unit": "%"
+    },
+    "Absolute Basophils": {
+      "value": 0,
+      "unit": "/µL"
+    },
+    "Lymphocytes": {
+      "value": 30,
+      "unit": "%"
+    },
+    "Absolute Lymphocytes": {
+      "value": 2100,
+      "unit": "/µL"
+    },
+    "Monocytes": {
+      "value": 8,
+      "unit": "%"
+    },
+    "Absolute Monocytes": {
+      "value": 560,
+      "unit": "/µL"
+    },
+    "Cholesterol (Total), serum by Enzymatic method": {
+      "value": 127,
+      "unit": "mg/dL"
+    },
+    "Triglycerides, serum by Enzymatic method": {
+      "value": 84,
+      "unit": "mg/dL"
+    },
+    "HDL Cholesterol, serum by Enzymatic method": {
+      "value": 54,
+      "unit": "mg/dL"
+    },
+    "VLDL Cholestrol, serum by calculation": {
+      "value": 17,
+      "unit": "mg/dL"
+    },
+    "LDL Cholesterol, serum by calculation": {
+      "value": 56,
+      "unit": "mg/dL"
+    },
+    "Triglycerides": {
+      "value": 17,
+      "unit": "mg/dL"
+    },
+    "LDL Cholesterol, serum": {
+      "value": 56,
+      "unit": "mg/dL"
+    },
+    "Cholesterol(Total)/HDL Cholesterol Ratio": {
+      "value": 2.35,
+      "unit": ""
+    },
+    "LDL Cholesterol/HDL Cholesterol Ratio": {
+      "value": 1.04,
+      "unit": ""
+    },
+    "Apolipoprotein A1, serum": {
+      "value": 165,
+      "unit": "mg/dL"
+    },
+    "Apolipoprotein B, serum": {
+      "value": 57,
+      "unit": "mg/dL"
+    },
+    "Apolipoprotein A1, serum by Nephelometry": {
+      "value": 165,
+      "unit": "mg/dL"
+    },
+    "Apolipoprotein B, serum by Nephelometry": {
+      "value": 57,
+      "unit": "mg/dL"
+    },
+    "Bilirubin-Total, serum": {
+      "value": 2.43,
+      "unit": "mg/dL"
+    },
+    "Bilirubin-Conjugated, serum": {
+      "value": 0.65,
+      "unit": "mg/dL"
+    },
+    "Bilirubin-Unconjugated, serum": {
+      "value": 1.78,
+      "unit": "mg/dL"
+    },
+    "SGOT (AST), serum": {
+      "value": 29,
+      "unit": "U/Lt"
+    },
+    "SGPT (ALT), serum": {
+      "value": 32,
+      "unit": "U/Lt"
+    },
+    "Alkaline Phosphatase, serum": {
+      "value": 77,
+      "unit": "U/Lt"
+    },
+    "Protein (total), serum": {
+      "value": 7.15,
+      "unit": "g/dL"
+    },
+    "Albumin, serum": {
+      "value": 4.51,
+      "unit": "g/dL"
+    },
+    "Globulin, serum": {
+      "value": 2.64,
+      "unit": "g/dL"
+    },
+    "Glycated Hemoglobin (HbA1C)": {
+      "value": 5.3,
+      "unit": "%"
+    },
+    "Adults": {
+      "value": 7,
+      "unit": "%"
+    },
+    "Toddlers and Preschoolers": {
+      "value": 8.5,
+      "unit": "% (but > 7.5 %)"
+    },
+    "School age (6-12 yrs)": {
+      "value": 8,
+      "unit": "%"
+    },
+    "Adolescents and young adults (13 - 19 yrs)": {
+      "value": 7.5,
+      "unit": "%"
+    },
+    "Gamma Glutamyl Transferase (GGT)": {
+      "value": 19,
+      "unit": "U/L"
+    },
+    "Plasma glucose fasting, by Hexokinase method": {
+      "value": 90,
+      "unit": "mg/dL"
+    },
+    "Plasma Glucose Fasting": {
+      "value": 90,
+      "unit": "mg/dL"
+    },
+    "Urea, Serum": {
+      "value": 18,
+      "unit": "mg/dL"
+    },
+    "Blood Urea Nitrogen, Serum": {
+      "value": 8.41,
+      "unit": "mg/dL"
+    },
+    "Creatinine, Serum": {
+      "value": 1.05,
+      "unit": "mg/dL"
+    },
+    "Uric Acid, Serum": {
+      "value": 7.1,
+      "unit": "mg/dL"
+    },
+    "Calcium, serum by OCPC method": {
+      "value": 9.6,
+      "unit": "mg/dL"
+    },
+    "Calcium, serum": {
+      "value": 9.6,
+      "unit": "mg/dL"
+    },
+    "Hypercalcemia": {
+      "value": 0,
+      "unit": ""
+    },
+    "Calcium": {
+      "value": 0,
+      "unit": ""
+    },
+    "Hypocalcemia": {
+      "value": 0,
+      "unit": ""
+    },
+    "Free T3, serum by CMIA": {
+      "value": 2.32,
+      "unit": "pg/mL"
+    },
+    "Free T4, serum by CMIA": {
+      "value": 0.99,
+      "unit": "ng/dL"
+    },
+    "TSH(Ultrasensitive), serum by CMIA": {
+      "value": 4.25,
+      "unit": "µIU/mL"
+    },
+    "Free T3": {
+      "value": 2.32,
+      "unit": "pg/mL"
+    },
+    "Free T4": {
+      "value": 0.99,
+      "unit": "ng/dL"
+    },
+    "TSH(Ultrasensitive)": {
+      "value": 4.25,
+      "unit": "µIU/mL"
+    },
+    "Insulin Fasting": {
+      "value": 10.7,
+      "unit": "µU/mL"
+    },
+    "Vitamin B12, serum by CMIA": {
+      "value": 945,
+      "unit": "pg/mL"
+    },
+    "Vitamin B12": {
+      "value": 1,
+      "unit": "decreased"
+    },
+    "Serum methylmalonic acid": {
+      "value": 1,
+      "unit": "elevated"
+    },
+    "Homocysteine": {
+      "value": 1,
+      "unit": "elevated"
+    },
+    "Active B12 (Holotranscobalamin)": {
+      "value": 1,
+      "unit": "low"
+    },
+    "25 - OH Vitamin D, serum by CMIA": {
+      "value": 42.2,
+      "unit": "ng/mL"
+    },
+    "Quantity Examined": {
+      "value": 5,
+      "unit": "ml"
+    },
+    "pH": {
+      "value": 5.5,
+      "unit": ""
+    },
+    "Acetone": {
+      "value": 0,
+      "unit": "Absent"
+    },
+    "Bile Pigments": {
+      "value": 0,
+      "unit": "Absent"
+    },
+    "Urobilinogen": {
+      "value": 0,
+      "unit": "Not Significant"
+    },
+    "R.B.Cs": {
+      "value": 0,
+      "unit": "per hpf"
+    },
+    "Pus cells": {
+      "value": 0,
+      "unit": "per hpf"
+    },
+    "Epithelial cells": {
+      "value": 0,
+      "unit": "per hpf"
+    },
+    "Casts": {
+      "value": 0,
+      "unit": "Not Detected"
+    },
+    "Crystals": {
+      "value": 0,
+      "unit": "Not Detected"
+    }
+  }
+}
+
+
+

@@ -10,8 +10,8 @@ services:
       MYSQL_USER: user  # Create a user
       MYSQL_PASSWORD: 123456  # Password for the user
     ports:
-      - "3306:3306"  # Expose MySQL on localhost:3306
+      - "3306:3306"  # Expose MySQL on
     volumes:
-      - /Users/spatkar/PycharmProjects/Health_Tracker_Python/MySql_Volume:/var/lib/mysql
+      - /Users/rdhakne/Desktop/PersonalRepo/Health_Tracker_Python/MySQLDB
 #volumes:
 #  mysql-data:

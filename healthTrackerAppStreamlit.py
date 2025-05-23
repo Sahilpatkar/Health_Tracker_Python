@@ -6,7 +6,7 @@ import numpy as np
 import plotly.express as px
 
 # Database Configuration
-db_config = st.secrets["database"]
+db_config = st.secrets["database_local"]
 
 
 
@@ -27,9 +27,48 @@ def setup_database():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    sql_ddl_files = {
+        "patient_observation": "DDL/patientObservationBronze.sql",
+        "cardio_stage_ranges": "DDL/cardioStageDDL.sql"
+    }
+
+    for table_name, file_path in sql_ddl_files.items():
+        try:
+            with open(file_path,"r") as f:
+                sql_statement = f.read()
+                cursor.execute(sql_statement)
+                print(f"Executed {table_name} table creation script successfully")
+        except Exception as e:
+            print(f"Error executing{table_name} scripts:{e}")
+
+    # Create user table
+    # cursor.execute("""
+    #     DROP TABLE IF EXISTS users
+    #
+    # """)
+
+    # Create user table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            userId INT AUTO_INCREMENT PRIMARY KEY,
+            user VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(255) NOT NULL
+        )
+    """)
+
+    # Add users
+    # cursor.execute("""
+    #     INSERT INTO users (user, password, role)
+    #     VALUES ('Sahil', '123456', 'admin'),
+    #             ('Rahul','123456','admin')
+    # """)
+
+
     # Create food_intake table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS food_intake (
+            user VARCHAR(255),
             id INT AUTO_INCREMENT PRIMARY KEY,
             food_id INT,
             date DATE NOT NULL,
@@ -56,12 +95,15 @@ def setup_database():
     # Create water_intake table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS water_intake (
+            user VARCHAR(255),
             id INT AUTO_INCREMENT PRIMARY KEY,
             date DATE NOT NULL,
             water_intake FLOAT NOT NULL,
             UNIQUE (date)
         )
     """)
+    #Create Observation table
+
     update_food_items_from_excel(cursor, conn)
     conn.commit()
     conn.close()
@@ -135,9 +177,9 @@ def insert_food_intake(food_id, date, meal_type, food_item, quantity, unit):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO food_intake (food_id, date, meal_type, food_item, quantity, unit)
-        VALUES (%s, %s, %s, %s, %s, %s)
-    """, (food_id, date, meal_type, food_item, quantity, unit))
+        INSERT INTO food_intake (user, food_id, date, meal_type, food_item, quantity, unit)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """, (st.session_state.username, food_id, date, meal_type, food_item, quantity, unit))
     conn.commit()
     conn.close()
 
@@ -146,9 +188,9 @@ def insert_water_intake(date, water_intake):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO water_intake (date, water_intake)
-        VALUES (%s, %s)
-    """, (date, water_intake))
+        INSERT INTO water_intake (user, date, water_intake)
+        VALUES (%s, %s, %s)
+    """, (st.session_state.username, date, water_intake))
     conn.commit()
     conn.close()
 
@@ -198,22 +240,31 @@ def calculate_metrices():
 
     # # Total Agg of all macros per Day Per Meal
     cursor.execute("""
+        with user_table as (
+        select * from food_intake
+                 where user = %s
+        )
         select date,F1.meal_type, SUM(quantity*protein) as total_protein_per_meal, SUM(quantity*fat) as total_fat_per_meal, SUM(quantity*calories) as total_calories_per_meal
-        from food_intake F1
+        from user_table F1
         join food_items F2 on F1.food_id = F2.id
         group by date,F1.meal_type
-        """)
+        """,(st.session_state.username,))
     agg_perDay_perMeal = pd.DataFrame(cursor.fetchall())
 
     # Total Agg of all macros per Day
     cursor.execute("""
+            with user_table as (
+            select * from food_intake
+                     where user = %s
+        )
+
         select date, SUM(total_protein_per_meal) as total_protein_per_day, SUM(total_fat_per_meal) as total_fat_per_day, SUM(total_calories_per_meal) as total_calories_per_day
         from(select date,F1.meal_type, SUM(quantity*protein) as total_protein_per_meal, SUM(quantity*fat) as total_fat_per_meal, SUM(quantity*calories) as total_calories_per_meal
-        from food_intake F1
+        from user_table F1
         join food_items F2 on F1.food_id = F2.id
         group by date,F1.meal_type) table1
         group by date;
-        """)
+        """,(st.session_state.username,))
     agg_perDay = pd.DataFrame(cursor.fetchall())
 
     conn.close()
@@ -297,102 +348,181 @@ class WaterIntakeTab:
         else:
             st.warning("Please select a date.")
 
+
+
+def Register(user, password, role):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # Check if the username already exists
+    cursor.execute("SELECT * FROM users WHERE user = %s", (user,))
+    existing = cursor.fetchone()
+    if existing:
+        conn.close()
+        return False, "User already exists."
+    # Insert new user (ensure you hash the password in production)
+    cursor.execute("INSERT INTO users (user, password, role) VALUES (%s, %s, %s)", (user, password, role))
+    conn.commit()
+    conn.close()
+    return True, "User registered successfully."
+
+
+def Auth(user, password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+            SELECT * FROM users WHERE user = %s AND password = %s
+        """, (user, password))
+    user_data = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    if user_data:
+        return user_data[0]
+    else:
+        return None
+
+def auth_client():
+    # If already logged in, show logout button and user details.
+    if st.session_state.get("logged_in"):
+        st.sidebar.write(f"Logged in as: {st.session_state.username} ({st.session_state.role})")
+        if st.sidebar.button("Logout"):
+            st.session_state.logged_in = False
+            st.session_state.username = ""
+            st.session_state.role = ""
+            #st.experimental_rerun()
+        return True
+
+    # If not logged in, allow the user to choose between Login and Register.
+    action = st.sidebar.radio("Action", ["Login", "Register"])
+    if action == "Login":
+        username = st.text_input("Username", key="login_username")
+        password = st.text_input("Password", type="password", key="login_password")
+        if st.button("Login", key="login_button"):
+            auth_result = Auth(username, password)
+            if auth_result and auth_result[3] in ['admin', 'user']:
+                st.success(f"Logged in as {username} with role: {auth_result[3]}")
+                st.session_state.logged_in = True
+                st.session_state.username = username
+                st.session_state.role = auth_result[3]
+                #st.experimental_rerun()
+            else:
+                st.error("Invalid username or password")
+    else:  # Registration
+        reg_username = st.text_input("Choose a username", key="reg_username")
+        reg_password = st.text_input("Choose a password", type="password", key="reg_password")
+        reg_password2 = st.text_input("Confirm password", type="password", key="reg_password2")
+        reg_role = st.selectbox("Select role", ["user"], key="reg_role")
+        if st.button("Register", key="register_button"):
+            if reg_password != reg_password2:
+                st.error("Passwords do not match")
+            else:
+                success, msg = Register(reg_username, reg_password, reg_role)
+                if success:
+                    st.success(msg)
+                    st.info("You can now log in with your credentials.")
+                else:
+                    st.error(msg)
+    return False
+
+
 # Main Streamlit App
 def main():
     setup_database()
     st.title("Health Tracker App")
 
-    # Select Tab
-    tab = st.sidebar.selectbox("Choose a Tab", ["Food Intake",  "Water Intake", "View Last 1 Month Data","Metrices"])
+    if auth_client():
 
-    if tab == "Food Intake":
-        FoodTab(tab_name="Food Intake")  # Adjust meal type as needed
-    elif tab == "Water Intake":
-        WaterIntakeTab()
-    elif tab == "View Last 1 Month Data":
-        st.header("View Last 1 Month Data")
 
-        # Fetch data
-        food_intake, water_intake = fetch_last_month_data()
-        print("TYPE",type(food_intake))
+        # Select Tab
+        tab = st.sidebar.selectbox("Choose a Tab", ["Food Intake",  "Water Intake", "View Last 1 Month Data","Metrices"])
 
-        # Display Health Data
-        st.subheader("Food Intake")
-        if not food_intake.empty:
-            st.dataframe(food_intake)
-        else:
-            st.write("No food intake records found for the last 1 month.")
+        if tab == "Food Intake":
+            FoodTab(tab_name="Food Intake")  # Adjust meal type as needed
+        elif tab == "Water Intake":
+            WaterIntakeTab()
+        elif tab == "View Last 1 Month Data":
+            st.header("View Last 1 Month Data")
 
-        # Display Water Intake Data
-        st.subheader("Water Intake")
-        if not water_intake.empty:
-            st.dataframe(water_intake)
-        else:
-            st.write("No water intake records found for the last 1 month.")
+            # Fetch data
+            food_intake, water_intake = fetch_last_month_data()
+            print("TYPE",type(food_intake))
 
-    elif tab == "Metrices":
-        st.header("View your progress")
+            # Display Health Data
+            st.subheader("Food Intake")
+            if not food_intake.empty:
+                st.dataframe(food_intake)
+            else:
+                st.write("No food intake records found for the last 1 month.")
 
-        agg_perDay_perMeal,agg_perDay = calculate_metrices()
+            # Display Water Intake Data
+            st.subheader("Water Intake")
+            if not water_intake.empty:
+                st.dataframe(water_intake)
+            else:
+                st.write("No water intake records found for the last 1 month.")
 
-        st.subheader("agg_perDay_perMeal")
-        st.dataframe(agg_perDay_perMeal)
+        elif tab == "Metrices":
+            st.header("View your progress")
 
-        st.subheader("agg_perDay")
-        st.dataframe(agg_perDay)
+            agg_perDay_perMeal,agg_perDay = calculate_metrices()
 
-        # Streamlit App
-        st.title("Nutritional Data Visualization")
+            st.subheader("agg_perDay_perMeal")
+            st.dataframe(agg_perDay_perMeal)
 
-        # Sidebar Options
-        st.sidebar.header("Visualization Options")
-        dataset = st.sidebar.selectbox("Choose a dataset:", ["Daily Aggregates", "Meal-wise Aggregates"])
-        chart_type = st.sidebar.selectbox("Choose a chart type:", ["Bar", "Line"])
+            st.subheader("agg_perDay")
+            st.dataframe(agg_perDay)
 
-        if dataset == "Daily Aggregates":
-            st.subheader("Daily Aggregates")
-            metric = st.selectbox("Choose a metric:", ["total_protein_per_day", "total_fat_per_day", "total_calories_per_day"])
-            
-            # Create the appropriate chart
-            if chart_type == "Bar":
-                fig = px.bar(agg_perDay, x="date", y=metric, title=f"{metric} Over Days", labels={"date": "Date", metric: "Value"})
-            elif chart_type == "Line":
-                fig = px.line(agg_perDay, x="date", y=metric, title=f"{metric} Over Days", labels={"date": "Date", metric: "Value"})
-            
-            st.plotly_chart(fig)
+            # Streamlit App
+            st.title("Nutritional Data Visualization")
 
-        elif dataset == "Meal-wise Aggregates":
-            st.subheader("Meal-wise Aggregates")
-            metric = st.selectbox("Choose a metric:", ["total_protein_per_meal", "total_fat_per_meal", "total_calories_per_meal"])
-            meal_types = st.multiselect("Select meal types to view:", agg_perDay_perMeal["meal_type"].unique(), default=agg_perDay_perMeal["meal_type"].unique())
-            
-            if meal_types:
-                # Filter the DataFrame based on selected meal types
-                filtered_data = agg_perDay_perMeal[agg_perDay_perMeal["meal_type"].isin(meal_types)]
-                
+            # Sidebar Options
+            st.sidebar.header("Visualization Options")
+            dataset = st.sidebar.selectbox("Choose a dataset:", ["Daily Aggregates", "Meal-wise Aggregates"])
+            chart_type = st.sidebar.selectbox("Choose a chart type:", ["Bar", "Line"])
+
+            if dataset == "Daily Aggregates":
+                st.subheader("Daily Aggregates")
+                metric = st.selectbox("Choose a metric:", ["total_protein_per_day", "total_fat_per_day", "total_calories_per_day"])
+
                 # Create the appropriate chart
                 if chart_type == "Bar":
-                    fig = px.bar(
-                        filtered_data,
-                        x="date",
-                        y=metric,
-                        color="meal_type",
-                        title=f"{metric} for Selected Meal Types Over Days",
-                        labels={"date": "Date", metric: "Value"}
-                    )
+                    fig = px.bar(agg_perDay, x="date", y=metric, title=f"{metric} Over Days", labels={"date": "Date", metric: "Value"})
                 elif chart_type == "Line":
-                    fig = px.line(
-                        filtered_data,
-                        x="date",
-                        y=metric,
-                        color="meal_type",
-                        title=f"{metric} for Selected Meal Types Over Days",
-                        labels={"date": "Date", metric: "Value"}
-                    )
-                
+                    fig = px.line(agg_perDay, x="date", y=metric, title=f"{metric} Over Days", labels={"date": "Date", metric: "Value"})
+
                 st.plotly_chart(fig)
-            else:
-                st.warning("Please select at least one meal type to display the data.")
+
+            elif dataset == "Meal-wise Aggregates":
+                st.subheader("Meal-wise Aggregates")
+                metric = st.selectbox("Choose a metric:", ["total_protein_per_meal", "total_fat_per_meal", "total_calories_per_meal"])
+                meal_types = st.multiselect("Select meal types to view:", agg_perDay_perMeal["meal_type"].unique(), default=agg_perDay_perMeal["meal_type"].unique())
+
+                if meal_types:
+                    # Filter the DataFrame based on selected meal types
+                    filtered_data = agg_perDay_perMeal[agg_perDay_perMeal["meal_type"].isin(meal_types)]
+
+                    # Create the appropriate chart
+                    if chart_type == "Bar":
+                        fig = px.bar(
+                            filtered_data,
+                            x="date",
+                            y=metric,
+                            color="meal_type",
+                            title=f"{metric} for Selected Meal Types Over Days",
+                            labels={"date": "Date", metric: "Value"}
+                        )
+                    elif chart_type == "Line":
+                        fig = px.line(
+                            filtered_data,
+                            x="date",
+                            y=metric,
+                            color="meal_type",
+                            title=f"{metric} for Selected Meal Types Over Days",
+                            labels={"date": "Date", metric: "Value"}
+                        )
+
+                    st.plotly_chart(fig)
+                else:
+                    st.warning("Please select at least one meal type to display the data.")
 
 
 if __name__ == "__main__":
