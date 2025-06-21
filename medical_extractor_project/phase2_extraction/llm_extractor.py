@@ -1,6 +1,6 @@
 import logging
 from openai import OpenAI
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator,field_validator
 from typing import Optional, Union
 
 from utils.safe_json_response import safe_json_loads
@@ -14,7 +14,7 @@ class ExtractedParameter(BaseModel):
     unit: Optional[str] = Field(None, description="Measurement unit (e.g., mg/dL, bpm) or 'unknown'")
     remark: Optional[str] = Field(None, description="Any additional comment or note")
 
-    @validator("unit", pre=True, always=True)
+    @field_validator("unit","remark")
     def set_default_unit(cls, v):
         if not v or not v.strip():
             logging.warning("Unit is missing or empty; setting to 'unknown'")

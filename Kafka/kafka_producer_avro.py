@@ -10,14 +10,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load Avro schema from file
-schema_path = "/SerDe/health_report.avsc"
+base_dir = os.path.dirname(os.path.abspath(__file__))
+schema_path = os.path.join(base_dir, "SerDe", "health_report.avsc")
 value_schema = avro.load(schema_path)
 
 # Initialize producer
 producer = AvroProducer(
     {
-        'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVER"),
-        'schema.registry.url': os.getenv("SCHEMA_REGISTRY_URL"),
+        'bootstrap.servers': os.getenv("KAFKA_BOOTSTRAP_SERVER_DOCKER"),
+        'schema.registry.url': os.getenv("SCHEMA_REGISTRY_URL_DOCKER"),
         'acks': '1'
     },
     default_value_schema=value_schema

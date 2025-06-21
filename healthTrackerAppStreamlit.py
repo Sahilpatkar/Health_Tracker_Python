@@ -12,26 +12,18 @@ import numpy as np
 import plotly.express as px
 from dotenv import load_dotenv
 
-
-from Kafka.kafka_producer_avro import send_to_kafka_avro
-from medical_extractor_project.utils.logger import setup_logger
-import logging
 from Agents.HealthReport_InformationAgent import extract_context_from_pdf
-from Kafka.kafka_producer import send_to_kafka
-
 from data_to_table import skim_required_parameters
 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "medical_extractor_project"))
 from medical_extractor_project.main import report_parameters_extractor
 
-setup_logger()
-
 load_dotenv()
 from Agents.HealthReportParameterAgent import extract_from_pdf
 
 # Database Configuration
-db_config = st.secrets["database_local"]
+db_config = st.secrets["database_docker"]
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
 os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
@@ -402,23 +394,11 @@ class Health_Report:
                     #     json.dump(ResponseDict, f, indent=4)
 
 
-                    context.model_dump()["user"] = st.session_state.username
-
-                    processed_out_path = f"HealthReport/{st.session_state.username}/processed_report/{context.date}/report_{st.session_state.username}_{context.date}.json"
+                    processed_out_path = f"HealthReport/{st.session_state.username}/processed_report/{context.date}/report_{context.name}_{context.date}.json"
                     processed_dir_name = os.path.dirname(processed_out_path)
                     os.makedirs(processed_dir_name, exist_ok=True)
-                    processed_parameter_dict = {
-                        "user": st.session_state.username,
-                        "context": context.model_dump(),
-                        "params": params_new}
-
-                    try:
-                        send_to_kafka_avro(processed_parameter_dict,"health-report-data")
-                        logging.info("Sent data to Kafka")
-                    except Exception as e:
-                        logging.error(f"Could not send parameters to Kafka due to {e}")
-
-
+                    processed_parameter_dict = {"context": context.model_dump(),
+                                                "params": params_new}
                     with open(processed_out_path, "w") as f:
                         json.dump(processed_parameter_dict, f, indent=4)
 

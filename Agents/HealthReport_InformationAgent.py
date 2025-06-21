@@ -18,22 +18,22 @@ os.environ["LANGCHAIN_PROJECT"]   = "ContextExtractor"
 
 class ReportContext(BaseModel):
     name: str
-    date: date
+    date: str
     gender: str
     location: str
 
-    @field_validator("name", "gender", "location")
+    @field_validator("*")
     def strip_fields(cls, v: str) -> str:
         return v.strip()
 
-    @field_validator("date", mode="before")
-    def parse_date(cls, v: str) -> date:
-        for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%d %b %Y"):
-            try:
-                return datetime.strptime(v.strip(), fmt).date()
-            except ValueError:
-                continue
-        raise ValueError("Invalid date format. Expected a valid date like YYYY-MM-DD.")
+    # @field_validator("date", mode="before")
+    # def parse_date(cls, v: str) -> date:
+    #     for fmt in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%d %b %Y"):
+    #         try:
+    #             return datetime.strptime(v.strip(), fmt).date()
+    #         except ValueError:
+    #             continue
+    #     raise ValueError("Invalid date format. Expected a valid date like YYYY-MM-DD.")
 
 SYSTEM_PROMPT = """
 You are given a chunk of a medical report. 
@@ -71,12 +71,7 @@ async def extract_context_from_pdf(pdf_dir: str) -> ReportContext:
             ctx = resp.output
             # if all fields are non-empty, return immediately
             if all(getattr(ctx, f) for f in ("name", "date", "gender", "location")):
-                return ReportContext(
-                    name=ctx.name,
-                    date=ctx.date.isoformat().strip(),
-                    gender=ctx.gender,
-                    location=ctx.location,
-                )
+                return ctx
 
     raise RuntimeError("Failed to extract all context fields from PDF.")
 
@@ -93,4 +88,3 @@ def clean_text(text: str) -> str:
 if __name__ == "__main__":
     out = asyncio.run(extract_context_from_pdf("/Users/spatkar/PycharmProjects/Health_Tracker_Python/datastore/"))
     print("context =", out)
-    print("context =", out.date)
