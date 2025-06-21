@@ -23,7 +23,7 @@ load_dotenv()
 from Agents.HealthReportParameterAgent import extract_from_pdf
 
 # Database Configuration
-db_config = st.secrets["database_local"]
+db_config = st.secrets["database_docker"]
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
 os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
