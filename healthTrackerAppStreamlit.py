@@ -8,19 +8,16 @@ import streamlit as st
 import pandas as pd
 import mysql.connector
 from datetime import datetime, timedelta
-import numpy as np
 import plotly.express as px
 from dotenv import load_dotenv
 
 from Agents.HealthReport_InformationAgent import extract_context_from_pdf
-from data_to_table import skim_required_parameters
 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "medical_extractor_project"))
 from medical_extractor_project.main import report_parameters_extractor
 
 load_dotenv()
-from Agents.HealthReportParameterAgent import extract_from_pdf
 
 # Database Configuration
 db_config = st.secrets["database_docker"]
