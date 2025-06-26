@@ -26,7 +26,7 @@ services:
     ports:
       - "3306:3306"  # Expose MySQL on localhost:3306
     volumes:
-      - /Users/spatkar/PycharmProjects/Health_Tracker_Python/MySql_Volume:/var/lib/mysql
+      - ./MySql_Volume:/var/lib/mysql
 #volumes:
 #  mysql-data:
 
