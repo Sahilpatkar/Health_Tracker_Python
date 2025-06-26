@@ -38,6 +38,7 @@ docker-compose up
 ```
 
 The Streamlit interface will be available on
-`http://localhost:8501` and MySQL will listen on port `3306`.  Kafka
-components are exposed on ports `9092`, `9093`, `8080` and `8082` as configured
+`http://localhost:8501` and MySQL will listen on port `3306`.
+Persistent MySQL data is stored in the `./MySql_Volume` directory by default.
+Kafka components are exposed on ports `9092`, `9093`, `8080` and `8082` as configured
 in `docker-compose.yml`.
