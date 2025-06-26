@@ -3,7 +3,7 @@ from openai import OpenAI
 from pydantic import BaseModel, Field, validator,field_validator
 from typing import Optional, Union
 
-from utils.safe_json_response import safe_json_loads
+from ..utils.safe_json_response import safe_json_loads
 
 # Initialize OpenAI client
 client = OpenAI()
