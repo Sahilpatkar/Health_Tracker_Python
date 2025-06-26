@@ -241,13 +241,13 @@ setup_database()
 
 
 def login_fn(username, password, state):
+    """Authenticate user and update the shared state."""
     user_data = Auth(username, password)
     if user_data:
         state["logged_in"] = True
         state["user"] = username
-        return f"Logged in as {username}", gr.update(visible=True), gr.update(visible=False)
-    else:
-        return "Invalid credentials", gr.update(), gr.update()
+        return f"Logged in as {username}"
+    return "Invalid credentials"
 
 
 def register_fn(username, password, confirm, state):
@@ -332,7 +332,7 @@ with gr.Blocks() as demo:
         login_password = gr.Textbox(label="Password", type="password")
         login_btn = gr.Button("Login")
         login_msg = gr.Markdown()
-        login_btn.click(login_fn, [login_username, login_password, state], [login_msg, gr.TabGroup.update(), gr.TabGroup.update()])
+        login_btn.click(login_fn, [login_username, login_password, state], login_msg)
 
     with gr.Tab("Register"):
         reg_username = gr.Textbox(label="Username")
