@@ -1,0 +1,9 @@
+# Ignore JetBrains IDE settings
+.idea/
+
+# Python cache directories
+__pycache__/
+*.pyc
+
+# macOS files
+.DS_Store
