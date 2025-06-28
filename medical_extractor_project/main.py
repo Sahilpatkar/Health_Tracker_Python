@@ -1,17 +1,15 @@
 
 
-from loader.pdf_loader import load_pdf_text
-from phase1_semantic.parameter_detector import detect_parameters
-from phase2_extraction.regex_extractor import extract_with_regex
-from phase2_extraction.llm_extractor import extract_with_llm
-from models.master_parameter_list import MASTER_PARAMETERS
-from utils.filename_generator import generate_output_filename
-from utils.logger import setup_logger
+from .loader.pdf_loader import load_pdf_text
+from .phase1_semantic.parameter_detector import detect_parameters
+from .phase2_extraction.regex_extractor import extract_with_regex
+from .phase2_extraction.llm_extractor import extract_with_llm
+from .models.master_parameter_list import MASTER_PARAMETERS
+from .utils.logger import setup_logger
 import logging
 
-from utils.per_report_logger import setup_report_logger
-from utils.text_chunker import split_text_into_chunks
-from utils.token_estimator import pretty_print_estimate
+from .utils.text_chunker import split_text_into_chunks
+from .utils.token_estimator import pretty_print_estimate
 
 
 def report_parameters_extractor(input_pdf_path: str, output_json_path: str):
@@ -69,9 +67,9 @@ def report_parameters_extractor(input_pdf_path: str, output_json_path: str):
             # Fallback to LLM extraction
             logging.info(f"Regex failed for {parameter}, trying LLM extraction.")
             extracted = extract_with_llm(text_chunk, parameter)
-            value = extracted.get("value")
-            unit = extracted.get("unit")
-            remark = extracted.get("remark")
+            value = extracted.value
+            unit = extracted.unit
+            remark = extracted.remark
 
         final_result[parameter] = {
             "value": value,
