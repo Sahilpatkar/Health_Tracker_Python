@@ -67,9 +67,9 @@ def report_parameters_extractor(input_pdf_path: str, output_json_path: str):
             # Fallback to LLM extraction
             logging.info(f"Regex failed for {parameter}, trying LLM extraction.")
             extracted = extract_with_llm(text_chunk, parameter)
-            value = extracted.get("value")
-            unit = extracted.get("unit")
-            remark = extracted.get("remark")
+            value = extracted.value
+            unit = extracted.unit
+            remark = extracted.remark
 
         final_result[parameter] = {
             "value": value,
