@@ -435,7 +435,8 @@ def delete_report(report_id, state):
     delete_report_entry(state["user"], int(report_id))
     df = fetch_reports(state["user"])
     opts = fetch_report_options(state["user"])
-    return "Report deleted", df, gr.update(choices=opts, value=None)
+    print("Deleted report entry")
+    return df, gr.update(choices=opts, value=None)
 
 
 def process_pdf(file, state):
@@ -456,20 +457,22 @@ def process_pdf(file, state):
             json.dump({"context": context.model_dump(), "params": params}, f, indent=4)
     # store report metadata
     try:
-        report_date = datetime.strptime(context.date, "%Y-%m-%d").date()
+        report_date_withTimestamp = context.date
+        report_date = report_date_withTimestamp.split("T")[0]
+        final_report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
     except ValueError:
         report_date = None
     insert_report(
         state["user"],
         context.name,
-        report_date,
+        final_report_date,
         datetime.now(),
         out_path,
     )
     df = fetch_reports(state["user"])
     opts = fetch_report_options(state["user"])
+    print("fProcessed report saved to {out_path}")
     return (
-        f"Processed report saved to {out_path}",
         df,
         gr.update(choices=opts, value=None),
     )
@@ -524,9 +527,9 @@ with gr.Blocks() as demo:
             report_select = gr.Dropdown(label="Select Report to Delete")
             delete_report_btn = gr.Button("Delete")
             pdf_msg = gr.Markdown()
-            process_btn.click(process_pdf, [pdf_file, state], [pdf_msg, report_table, report_select])
+            process_btn.click(process_pdf, [pdf_file, state], [report_table, report_select])
             report_refresh_btn.click(show_reports, state, [report_table, report_select])
-            delete_report_btn.click(delete_report, [report_select, state], [pdf_msg, report_table, report_select])
+            delete_report_btn.click(delete_report, [report_select, state], [report_table, report_select])
 
     with gr.Group() as auth_group:
         with gr.Tabs():
@@ -552,4 +555,4 @@ with gr.Blocks() as demo:
     logout_btn.click(logout_fn, state, [auth_group, main_tabs, user_status, logout_btn, report_table, report_select])
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
