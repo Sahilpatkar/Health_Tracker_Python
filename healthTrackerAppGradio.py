@@ -336,7 +336,7 @@ def login_fn(username, password, state):
             gr.update(value=f"**Logged in as {username}**", visible=True),
             gr.update(visible=True),
             reports,
-            options,
+            gr.update(choices=options, value=None),
         )
     return (
         "Invalid credentials",
@@ -345,7 +345,7 @@ def login_fn(username, password, state):
         gr.update(),
         gr.update(),
         None,
-        [],
+        gr.update(choices=[], value=None),
     )
 
 
@@ -366,7 +366,7 @@ def logout_fn(state):
         gr.update(value="", visible=False),
         gr.update(visible=False),
         None,
-        [],
+        gr.update(choices=[], value=None),
     )
 
 
@@ -422,20 +422,20 @@ def show_reports(state):
         return None, []
     df = fetch_reports(state["user"])
     opts = fetch_report_options(state["user"])
-    return df, opts
+    return df, gr.update(choices=opts, value=None)
 
 
 def delete_report(report_id, state):
     if not state.get("logged_in"):
-        return "Please login first", None, []
+        return "Please login first", None, gr.update(choices=[], value=None)
     if not report_id:
         df = fetch_reports(state["user"])
         opts = fetch_report_options(state["user"])
-        return "No report selected", df, opts
+        return "No report selected", df, gr.update(choices=opts, value=None)
     delete_report_entry(state["user"], int(report_id))
     df = fetch_reports(state["user"])
     opts = fetch_report_options(state["user"])
-    return "Report deleted", df, opts
+    return "Report deleted", df, gr.update(choices=opts, value=None)
 
 
 def process_pdf(file, state):
@@ -468,7 +468,11 @@ def process_pdf(file, state):
     )
     df = fetch_reports(state["user"])
     opts = fetch_report_options(state["user"])
-    return f"Processed report saved to {out_path}", df, opts
+    return (
+        f"Processed report saved to {out_path}",
+        df,
+        gr.update(choices=opts, value=None),
+    )
 
 
 with gr.Blocks() as demo:
