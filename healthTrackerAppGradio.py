@@ -168,8 +168,8 @@ def fetch_report_options(user):
     conn.close()
     options = [
         (
-            str(r[0]),
             f"{r[1]} | {r[2]} | {r[3].strftime('%Y-%m-%d %H:%M')}",
+            str(r[0]),
         )
         for r in rows
     ]
