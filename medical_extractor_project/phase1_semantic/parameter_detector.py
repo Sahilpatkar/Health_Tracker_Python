@@ -2,11 +2,11 @@ import json
 import logging
 import os
 
-from phase1_semantic.prompt_templates import build_detection_prompt
+from .prompt_templates import build_detection_prompt
 from openai import OpenAI
 from dotenv import load_dotenv
 
-from utils.safe_json_response import safe_json_loads
+from ..utils.safe_json_response import safe_json_loads
 
 load_dotenv()
 
