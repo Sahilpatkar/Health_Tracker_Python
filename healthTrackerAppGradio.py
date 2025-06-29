@@ -1,5 +1,6 @@
 # New Gradio front-end for Health Tracker
 import os
+import shutil
 import tempfile
 import asyncio
 import json
@@ -328,8 +329,9 @@ def process_pdf(file, state):
     if file is None:
         return "No file uploaded"
     with tempfile.TemporaryDirectory() as tmpdir:
-        tmp_path = os.path.join(tmpdir, file.name)
-        file.save(tmp_path)
+        src_path = getattr(file, "name", str(file))
+        tmp_path = os.path.join(tmpdir, os.path.basename(src_path))
+        shutil.copy(src_path, tmp_path)
         context = asyncio.run(extract_context_from_pdf(tmpdir))
         params = report_parameters_extractor(tmp_path, "")
         out_dir = f"HealthReport/{state['user']}/processed_report/{context.date}"
