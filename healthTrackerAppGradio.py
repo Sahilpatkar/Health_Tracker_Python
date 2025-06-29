@@ -78,6 +78,18 @@ def setup_database():
         )
         """
     )
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS reports (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user VARCHAR(255),
+            report_name VARCHAR(255),
+            report_date DATE,
+            upload_date DATETIME,
+            file_path VARCHAR(255)
+        )
+        """
+    )
     conn.commit()
     conn.close()
 
@@ -119,6 +131,51 @@ def insert_water_intake(user, date, water_intake):
     conn.close()
 
 
+def insert_report(user, report_name, report_date, upload_date, file_path):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        INSERT INTO reports (user, report_name, report_date, upload_date, file_path)
+        VALUES (%s, %s, %s, %s, %s)
+        """,
+        (user, report_name, report_date, upload_date, file_path),
+    )
+    conn.commit()
+    conn.close()
+
+
+def fetch_reports(user):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT report_name, report_date, upload_date FROM reports WHERE user=%s ORDER BY upload_date DESC",
+        (user,),
+    )
+    df = pd.DataFrame(cursor.fetchall())
+    conn.close()
+    return df
+
+
+def fetch_report_options(user):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT id, report_name, report_date, upload_date FROM reports WHERE user=%s ORDER BY upload_date DESC",
+        (user,),
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    options = [
+        (
+            f"{r[1]} | {r[2]} | {r[3].strftime('%Y-%m-%d %H:%M')}",
+            str(r[0]),
+        )
+        for r in rows
+    ]
+    return options
+
+
 def delete_last_entry(user, date, meal_type=None):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -136,6 +193,29 @@ def delete_last_entry(user, date, meal_type=None):
             """,
             (user, date),
         )
+    conn.commit()
+    conn.close()
+
+
+def delete_report_entry(user, report_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT file_path FROM reports WHERE user=%s AND id=%s",
+        (user, report_id),
+    )
+    row = cursor.fetchone()
+    if row:
+        file_path = row[0]
+        if file_path and os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except OSError:
+                pass
+    cursor.execute(
+        "DELETE FROM reports WHERE user=%s AND id=%s",
+        (user, report_id),
+    )
     conn.commit()
     conn.close()
 
@@ -247,14 +327,26 @@ def login_fn(username, password, state):
     if user_data:
         state["logged_in"] = True
         state["user"] = username
+        reports = fetch_reports(username)
+        options = fetch_report_options(username)
         return (
             f"Login successful. Welcome {username}!",
             gr.update(visible=False),
             gr.update(visible=True),
             gr.update(value=f"**Logged in as {username}**", visible=True),
             gr.update(visible=True),
+            reports,
+            gr.update(choices=options, value=None),
         )
-    return ("Invalid credentials", gr.update(), gr.update(), gr.update(), gr.update())
+    return (
+        "Invalid credentials",
+        gr.update(),
+        gr.update(),
+        gr.update(),
+        gr.update(),
+        None,
+        gr.update(choices=[], value=None),
+    )
 
 
 def register_fn(username, password, confirm, state):
@@ -273,6 +365,8 @@ def logout_fn(state):
         gr.update(visible=False),
         gr.update(value="", visible=False),
         gr.update(visible=False),
+        None,
+        gr.update(choices=[], value=None),
     )
 
 
@@ -323,11 +417,33 @@ def show_metrics(state):
     return per_meal, per_day, fig
 
 
+def show_reports(state):
+    if not state.get("logged_in"):
+        return None, []
+    df = fetch_reports(state["user"])
+    opts = fetch_report_options(state["user"])
+    return df, gr.update(choices=opts, value=None)
+
+
+def delete_report(report_id, state):
+    if not state.get("logged_in"):
+        return "Please login first", None, gr.update(choices=[], value=None)
+    if not report_id:
+        df = fetch_reports(state["user"])
+        opts = fetch_report_options(state["user"])
+        return "No report selected", df, gr.update(choices=opts, value=None)
+    delete_report_entry(state["user"], int(report_id))
+    df = fetch_reports(state["user"])
+    opts = fetch_report_options(state["user"])
+    print("Deleted report entry")
+    return df, gr.update(choices=opts, value=None)
+
+
 def process_pdf(file, state):
     if not state.get("logged_in"):
-        return "Please login first"
+        return "Please login first", None
     if file is None:
-        return "No file uploaded"
+        return "No file uploaded", None
     with tempfile.TemporaryDirectory() as tmpdir:
         src_path = getattr(file, "name", str(file))
         tmp_path = os.path.join(tmpdir, os.path.basename(src_path))
@@ -339,7 +455,27 @@ def process_pdf(file, state):
         out_path = os.path.join(out_dir, f"report_{context.name}_{context.date}.json")
         with open(out_path, "w") as f:
             json.dump({"context": context.model_dump(), "params": params}, f, indent=4)
-    return f"Processed report saved to {out_path}"
+    # store report metadata
+    try:
+        report_date_withTimestamp = context.date
+        report_date = report_date_withTimestamp.split("T")[0]
+        final_report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
+    except ValueError:
+        report_date = None
+    insert_report(
+        state["user"],
+        context.name,
+        final_report_date,
+        datetime.now(),
+        out_path,
+    )
+    df = fetch_reports(state["user"])
+    opts = fetch_report_options(state["user"])
+    print("fProcessed report saved to {out_path}")
+    return (
+        df,
+        gr.update(choices=opts, value=None),
+    )
 
 
 with gr.Blocks() as demo:
@@ -386,8 +522,14 @@ with gr.Blocks() as demo:
         with gr.Tab("Health Report"):
             pdf_file = gr.File(label="Upload PDF")
             process_btn = gr.Button("Process")
+            report_refresh_btn = gr.Button("Refresh")
+            report_table = gr.Dataframe()
+            report_select = gr.Dropdown(label="Select Report to Delete")
+            delete_report_btn = gr.Button("Delete")
             pdf_msg = gr.Markdown()
-            process_btn.click(process_pdf, [pdf_file, state], pdf_msg)
+            process_btn.click(process_pdf, [pdf_file, state], [report_table, report_select])
+            report_refresh_btn.click(show_reports, state, [report_table, report_select])
+            delete_report_btn.click(delete_report, [report_select, state], [report_table, report_select])
 
     with gr.Group() as auth_group:
         with gr.Tabs():
@@ -407,10 +549,10 @@ with gr.Blocks() as demo:
     login_btn.click(
         login_fn,
         [login_username, login_password, state],
-        [login_msg, auth_group, main_tabs, user_status, logout_btn],
+        [login_msg, auth_group, main_tabs, user_status, logout_btn, report_table, report_select],
     )
     reg_btn.click(register_fn, [reg_username, reg_password, reg_confirm, state], reg_msg)
-    logout_btn.click(logout_fn, state, [auth_group, main_tabs, user_status, logout_btn])
+    logout_btn.click(logout_fn, state, [auth_group, main_tabs, user_status, logout_btn, report_table, report_select])
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
