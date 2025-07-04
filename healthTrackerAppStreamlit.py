@@ -83,7 +83,10 @@ def setup_database():
             meal_type VARCHAR(255) NOT NULL,
             food_item VARCHAR(255),
             quantity FLOAT,
-            unit VARCHAR(255)
+            unit VARCHAR(255),
+            total_protein FLOAT,
+            total_fat FLOAT,
+            total_calories FLOAT
         )
     """)
 
@@ -182,10 +185,38 @@ def get_food_items():
 def insert_food_intake(food_id, date, meal_type, food_item, quantity, unit):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        INSERT INTO food_intake (user, food_id, date, meal_type, food_item, quantity, unit)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-    """, (st.session_state.username, food_id, date, meal_type, food_item, quantity, unit))
+
+    cursor.execute(
+        "SELECT protein, fat, calories FROM food_items WHERE id = %s",
+        (food_id,),
+    )
+    macros = cursor.fetchone()
+    if macros:
+        protein_per_unit, fat_per_unit, calories_per_unit = macros
+        total_protein = protein_per_unit * quantity
+        total_fat = fat_per_unit * quantity
+        total_calories = calories_per_unit * quantity
+    else:
+        total_protein = total_fat = total_calories = None
+
+    cursor.execute(
+        """
+        INSERT INTO food_intake (user, food_id, date, meal_type, food_item, quantity, unit, total_protein, total_fat, total_calories)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """,
+        (
+            st.session_state.username,
+            food_id,
+            date,
+            meal_type,
+            food_item,
+            quantity,
+            unit,
+            total_protein,
+            total_fat,
+            total_calories,
+        ),
+    )
     conn.commit()
     conn.close()
 
@@ -244,33 +275,35 @@ def calculate_metrices():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    # # Total Agg of all macros per Day Per Meal
-    cursor.execute("""
-        with user_table as (
-        select * from food_intake
-                 where user = %s
-        )
-        select date,F1.meal_type, SUM(quantity*protein) as total_protein_per_meal, SUM(quantity*fat) as total_fat_per_meal, SUM(quantity*calories) as total_calories_per_meal
-        from user_table F1
-        join food_items F2 on F1.food_id = F2.id
-        group by date,F1.meal_type
-        """,(st.session_state.username,))
+    # Total macros per Day and Meal using stored values
+    cursor.execute(
+        """
+        SELECT date,
+               meal_type,
+               SUM(total_protein)  AS total_protein_per_meal,
+               SUM(total_fat)      AS total_fat_per_meal,
+               SUM(total_calories) AS total_calories_per_meal
+        FROM food_intake
+        WHERE user = %s
+        GROUP BY date, meal_type
+        """,
+        (st.session_state.username,),
+    )
     agg_perDay_perMeal = pd.DataFrame(cursor.fetchall())
 
-    # Total Agg of all macros per Day
-    cursor.execute("""
-            with user_table as (
-            select * from food_intake
-                     where user = %s
-        )
-
-        select date, SUM(total_protein_per_meal) as total_protein_per_day, SUM(total_fat_per_meal) as total_fat_per_day, SUM(total_calories_per_meal) as total_calories_per_day
-        from(select date,F1.meal_type, SUM(quantity*protein) as total_protein_per_meal, SUM(quantity*fat) as total_fat_per_meal, SUM(quantity*calories) as total_calories_per_meal
-        from user_table F1
-        join food_items F2 on F1.food_id = F2.id
-        group by date,F1.meal_type) table1
-        group by date;
-        """,(st.session_state.username,))
+    # Total macros per Day using stored values
+    cursor.execute(
+        """
+        SELECT date,
+               SUM(total_protein)  AS total_protein_per_day,
+               SUM(total_fat)      AS total_fat_per_day,
+               SUM(total_calories) AS total_calories_per_day
+        FROM food_intake
+        WHERE user = %s
+        GROUP BY date
+        """,
+        (st.session_state.username,),
+    )
     agg_perDay = pd.DataFrame(cursor.fetchall())
 
     conn.close()
