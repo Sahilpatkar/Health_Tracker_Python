@@ -4,6 +4,7 @@ import mysql.connector
 import requests
 import streamlit as st
 from typing import Optional, Dict
+import difflib
 from openai import OpenAI
 from duckduckgo_search import DDGS
 
@@ -31,6 +32,17 @@ def get_db_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
 
+def reconcile_food_label(food_item: str) -> str:
+    """Return the closest matching food item label from the database."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT food_item FROM food_items")
+    names = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    matches = difflib.get_close_matches(food_item, names, n=1, cutoff=0.8)
+    return matches[0] if matches else food_item
+
+
 def fetch_macros_from_db(food_item: str) -> Optional[Dict[str, float]]:
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -39,6 +51,14 @@ def fetch_macros_from_db(food_item: str) -> Optional[Dict[str, float]]:
         (food_item,),
     )
     row = cursor.fetchone()
+    if not row:
+        canonical = reconcile_food_label(food_item)
+        if canonical != food_item:
+            cursor.execute(
+                "SELECT id, serving_size, protein, fat, calories FROM food_items WHERE food_item = %s",
+                (canonical,),
+            )
+            row = cursor.fetchone()
     conn.close()
     if row:
         return {
