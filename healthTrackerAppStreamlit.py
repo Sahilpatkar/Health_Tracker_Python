@@ -309,6 +309,23 @@ class FoodTab:
         if st.button("Delete Last Entry"):
             self.delete_last_entry()
 
+        st.divider()
+        st.subheader("Food Intake Chat Bot")
+        if "food_chatbot" not in st.session_state:
+            from Agents.FoodIntakeChatBotAgent import FoodChatBot
+            st.session_state.food_chatbot = FoodChatBot()
+            st.session_state.food_chat_history = []
+
+        for msg in st.session_state.food_chat_history:
+            st.chat_message(msg["role"]).write(msg["content"])
+
+        user_prompt = st.chat_input("Talk to the food bot")
+        if user_prompt:
+            st.session_state.food_chat_history.append({"role": "user", "content": user_prompt})
+            response = st.session_state.food_chatbot.chat(user_prompt)
+            st.session_state.food_chat_history.append({"role": "assistant", "content": response})
+            st.chat_message("assistant").write(response)
+
     def save_data(self):
         if self.date and self.selected_food_item and self.quantity:
             insert_food_intake(self.food_id, self.date, self.selected_meal_type, self.selected_food_item, self.quantity, self.serving_size)
