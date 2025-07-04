@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import plotly.express as px
 from dotenv import load_dotenv
+from pymongo import MongoClient
 
 from Agents.HealthReport_InformationAgent import extract_context_from_pdf
 from data_to_table import skim_required_parameters
@@ -23,7 +24,7 @@ load_dotenv()
 from Agents.HealthReportParameterAgent import extract_from_pdf
 
 # Database Configuration
-db_config = st.secrets["database_docker"]
+db_config = st.secrets["database_local"]
 
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
 os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
@@ -38,6 +39,10 @@ DB_CONFIG = {
     "password": db_config["password"],
     "database": db_config["database"],
 }
+
+mongoDB_client = MongoClient(db_config["mongoDB_client"])
+mongoDB = mongoDB_client[db_config["database"]]
+
 
 # Database Connection
 def get_db_connection():
@@ -401,6 +406,17 @@ class Health_Report:
                                                 "params": params_new}
                     with open(processed_out_path, "w") as f:
                         json.dump(processed_parameter_dict, f, indent=4)
+
+                    mongodb_collection = mongoDB["processed_parameter_dictionary"]
+                    try:
+                        if isinstance(processed_parameter_dict, list):
+                            mongodb_collection.insert_many(processed_parameter_dict)
+
+                        else:
+                            mongodb_collection.insert_one(processed_parameter_dict)
+                        print("Data Inserted to MongoDB")
+                    except Exception as e:
+                        st.error(f"Data not saved to mongodb due to: {e}")
 
                 except Exception as e:
                     st.error(f"Extraction failed: {e}")
