@@ -112,15 +112,47 @@ def fetch_macros_from_web(food_item: str) -> Optional[Dict[str, float]]:
     return None
 
 
-def insert_food_intake(food_id: Optional[int], date: str, meal_type: str, food_item: str, quantity: float, unit: str) -> str:
+def insert_food_intake(
+    food_id: Optional[int],
+    date: str,
+    meal_type: str,
+    food_item: str,
+    quantity: float,
+    unit: str,
+) -> str:
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT protein, fat, calories FROM food_items WHERE id = %s",
+        (food_id,),
+    )
+    macros = cursor.fetchone()
+    if macros:
+        protein_per_unit, fat_per_unit, calories_per_unit = macros
+        total_protein = protein_per_unit * quantity
+        total_fat = fat_per_unit * quantity
+        total_calories = calories_per_unit * quantity
+    else:
+        total_protein = total_fat = total_calories = None
+
     cursor.execute(
         """
-        INSERT INTO food_intake (user, food_id, date, meal_type, food_item, quantity, unit)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO food_intake (user, food_id, date, meal_type, food_item, quantity, unit, total_protein, total_fat, total_calories)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """,
-        (st.session_state.username, food_id, date, meal_type, food_item, quantity, unit),
+        (
+            st.session_state.username,
+            food_id,
+            date,
+            meal_type,
+            food_item,
+            quantity,
+            unit,
+            total_protein,
+            total_fat,
+            total_calories,
+        ),
     )
     conn.commit()
     conn.close()
