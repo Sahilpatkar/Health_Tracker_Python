@@ -1,0 +1,356 @@
+{
+    "user": "shashank",
+    "context": {
+        "name": "SHASHANK ANANT PATKAR",
+        "date": "2023-04-04T15:12:00",
+        "gender": "MALE",
+        "location": "Supreme Pallacio Baner, Pune"
+    },
+    "params": {
+        "Hemoglobin (Hb)": {
+            "value": "15.0",
+            "unit": "13",
+            "remark": ""
+        },
+        "Total Leucocytes (WBC) count": {
+            "value": "7300.0",
+            "unit": "4000",
+            "remark": ""
+        },
+        "Platelet count": {
+            "value": "297000.0",
+            "unit": "150000",
+            "remark": ""
+        },
+        "Red blood cell (RBC) count": {
+            "value": "5.13",
+            "unit": "4",
+            "remark": ""
+        },
+        "PCV (Packed Cell Volume)": {
+            "value": "42.9",
+            "unit": "38",
+            "remark": ""
+        },
+        "MCV (Mean Corpuscular Volume)": {
+            "value": "83.7",
+            "unit": "78",
+            "remark": ""
+        },
+        "MCH (Mean Corpuscular Hb)": {
+            "value": "29.2",
+            "unit": "27",
+            "remark": ""
+        },
+        "MCHC (Mean Corpuscular Hb Conc.)": {
+            "value": "34.9",
+            "unit": "31",
+            "remark": ""
+        },
+        "RDW (RBC distribution width)": {
+            "value": "13.3",
+            "unit": "11",
+            "remark": ""
+        },
+        "MPV (Mean Platelet Volume)": {
+            "value": "7.7",
+            "unit": "7",
+            "remark": ""
+        },
+        "Neutrophils": {
+            "value": "53.0",
+            "unit": "40",
+            "remark": ""
+        },
+        "Absolute Neutrophils": {
+            "value": "3869.0",
+            "unit": "2000",
+            "remark": ""
+        },
+        "Eosinophils": {
+            "value": "8.0",
+            "unit": "1",
+            "remark": ""
+        },
+        "Absolute Eosinophils": {
+            "value": "584.0",
+            "unit": "20",
+            "remark": ""
+        },
+        "Basophils": {
+            "value": "0.0",
+            "unit": "0",
+            "remark": ""
+        },
+        "Absolute Basophils": {
+            "value": "0.0",
+            "unit": "0",
+            "remark": ""
+        },
+        "Lymphocytes": {
+            "value": "30.0",
+            "unit": "20",
+            "remark": ""
+        },
+        "Absolute Lymphocytes": {
+            "value": "2190.0",
+            "unit": "1000",
+            "remark": ""
+        },
+        "Monocytes": {
+            "value": "9.0",
+            "unit": "2",
+            "remark": ""
+        },
+        "Absolute Monocytes": {
+            "value": "657.0",
+            "unit": "200",
+            "remark": ""
+        },
+        "Cholesterol (Total)": {
+            "value": "141.0",
+            "unit": "Desirable",
+            "remark": ""
+        },
+        "Triglycerides": {
+            "value": "104.0",
+            "unit": "Normal",
+            "remark": ""
+        },
+        "HDL Cholesterol": {
+            "value": "49.0",
+            "unit": "Males",
+            "remark": ""
+        },
+        "VLDL Cholesterol": {
+            "value": "21.0",
+            "unit": "mg/dL",
+            "remark": "< 30 mg/dL"
+        },
+        "LDL Cholesterol": {
+            "value": "71.0",
+            "unit": "Optimal",
+            "remark": ""
+        },
+        "Cholesterol/HDL Ratio": {
+            "value": "2.88",
+            "unit": "unknown",
+            "remark": "Males : Acceptable ratio </= 5.00"
+        },
+        "LDL/HDL Ratio": {
+            "value": "1.45",
+            "unit": "unknown",
+            "remark": "Males: Acceptable ratio </= 3.60; Females: Acceptable ratio </= 3.20"
+        },
+        "Apolipoprotein A1": {
+            "value": "162.0",
+            "unit": "",
+            "remark": ""
+        },
+        "Apolipoprotein B": {
+            "value": "67.0",
+            "unit": "Desirable",
+            "remark": ""
+        },
+        "ApoB/A1 Ratio": {
+            "value": "0.41",
+            "unit": "unknown",
+            "remark": "Lower Risk : < 0.7"
+        },
+        "Bilirubin-Total": {
+            "value": "2.0",
+            "unit": "0",
+            "remark": ""
+        },
+        "Bilirubin-Conjugated": {
+            "value": "0.6",
+            "unit": "Upto",
+            "remark": ""
+        },
+        "Bilirubin-Unconjugated": {
+            "value": "1.4",
+            "unit": "0",
+            "remark": ""
+        },
+        "SGOT (AST)": {
+            "value": "46.0",
+            "unit": "",
+            "remark": ""
+        },
+        "SGPT (ALT)": {
+            "value": "38.0",
+            "unit": "7",
+            "remark": ""
+        },
+        "Alkaline Phosphatase": {
+            "value": "77.0",
+            "unit": "Adult",
+            "remark": ""
+        },
+        "Protein (Total)": {
+            "value": "6.9",
+            "unit": "6",
+            "remark": ""
+        },
+        "Albumin": {
+            "value": "4.6",
+            "unit": "3",
+            "remark": ""
+        },
+        "Globulin": {
+            "value": "2.3",
+            "unit": "2",
+            "remark": ""
+        },
+        "Plasma Glucose Fasting": {
+            "value": "96.0",
+            "unit": "Fasting",
+            "remark": ""
+        },
+        "Urea": {
+            "value": "33.0",
+            "unit": "17",
+            "remark": ""
+        },
+        "BUN (Blood Urea Nitrogen)": {
+            "value": "15.42",
+            "unit": "mg/dL",
+            "remark": "unknown"
+        },
+        "Creatinine": {
+            "value": "1.02",
+            "unit": "0",
+            "remark": ""
+        },
+        "Vitamin D": {
+            "value": "33.9",
+            "unit": "Severe",
+            "remark": ""
+        },
+        "Vitamin B12": {
+            "value": "740.0",
+            "unit": "187",
+            "remark": ""
+        },
+        "Insulin Fasting": {
+            "value": "11.6",
+            "unit": "2",
+            "remark": ""
+        },
+        "Free T3": {
+            "value": "2.44",
+            "unit": "1",
+            "remark": ""
+        },
+        "Free T4": {
+            "value": "1.06",
+            "unit": "0",
+            "remark": ""
+        },
+        "TSH (Ultrasensitive)": {
+            "value": "3.52",
+            "unit": "\u00b5IU/mL",
+            "remark": "Reference range: 0.40 - 4.00 \u00b5IU/mL"
+        },
+        "HbA1C": {
+            "value": "5.3",
+            "unit": "4",
+            "remark": ""
+        },
+        "Estimated Average Glucose (eAG)": {
+            "value": "105.0",
+            "unit": "mg/dL",
+            "remark": ""
+        },
+        "PSA": {
+            "value": "3.474",
+            "unit": "Age",
+            "remark": ""
+        },
+        "CRP(hs)": {
+            "value": "0.62",
+            "unit": "See",
+            "remark": ""
+        },
+        "Calcium": {
+            "value": "9.5",
+            "unit": "Adult",
+            "remark": ""
+        },
+        "ESR (Erythrocyte Sedimentation Rate)": {
+            "value": "5.0",
+            "unit": "mm/hr",
+            "remark": "Male under 50 Yrs : Upto 15mm/hr.\nMale 50 - 85 Yrs : Upto 20mm/hr.\nMale > 85 yrs : Upto 30mm/hr."
+        },
+        "Urine Routine Examination pH": {
+            "value": "6.5",
+            "unit": "unknown",
+            "remark": "pH is within the reference interval of 4.6 - 8.0."
+        },
+        "Urine Routine Examination Protein": {
+            "value": "Absent",
+            "unit": "unknown",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Glucose": {
+            "value": "Absent",
+            "unit": "unknown",
+            "remark": "Absent"
+        },
+        "Urine Routine Examination Acetone": {
+            "value": "Absent",
+            "unit": "unknown",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Bile Pigments": {
+            "value": "Absent",
+            "unit": "unknown",
+            "remark": "Absent"
+        },
+        "Urine Routine Examination Urobilinogen": {
+            "value": "Not significant",
+            "unit": "unknown",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination RBCs": {
+            "value": "Absent",
+            "unit": "0 - 2 per hpf",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Pus cells": {
+            "value": "2-3",
+            "unit": "per hpf",
+            "remark": "0 - 5 per hpf"
+        },
+        "Urine Routine Examination Epithelial cells": {
+            "value": "1-2",
+            "unit": "per hpf",
+            "remark": "0 - 5 per hpf"
+        },
+        "Urine Routine Examination Casts": {
+            "value": "Not detected",
+            "unit": "unknown",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Crystals": {
+            "value": "Not detected",
+            "unit": "-",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Quantity Examined": {
+            "value": "5.0",
+            "unit": "ml",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Appearance": {
+            "value": "Clear",
+            "unit": "unknown",
+            "remark": "unknown"
+        },
+        "Urine Routine Examination Colour": {
+            "value": "Pale yellow",
+            "unit": "unknown",
+            "remark": "unknown"
+        }
+    }
+}

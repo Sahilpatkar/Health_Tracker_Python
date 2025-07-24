@@ -1,0 +1,230 @@
+{
+    "context": {
+        "name": "ANSHITA GAUR",
+        "date": "2024-11-07",
+        "gender": "Female",
+        "location": "PUNE, MAH, INDIA"
+    },
+    "params": {
+        "Hemoglobin (Hb)": {
+            "value": 12.73,
+            "unit": "g/dL",
+            "remark": "Normal range is 12.00 - 15.00 g/dL."
+        },
+        "Total Leucocytes (WBC) count": {
+            "value": 7.58,
+            "unit": "thou/mm3",
+            "remark": "Normal range is 4.00 - 10.00 thou/mm3."
+        },
+        "Platelet count": {
+            "value": 150.0,
+            "unit": "",
+            "remark": ""
+        },
+        "Red blood cell (RBC) count": {
+            "value": 4.18,
+            "unit": "mill/mm3",
+            "remark": "Within reference range"
+        },
+        "PCV (Packed Cell Volume)": {
+            "value": 38.8,
+            "unit": "%",
+            "remark": "Normal range is 36.00 - 46.00 %"
+        },
+        "MCV (Mean Corpuscular Volume)": {
+            "value": 92.8,
+            "unit": "fL",
+            "remark": "unknown"
+        },
+        "MCH (Mean Corpuscular Hb)": {
+            "value": 30.5,
+            "unit": "pg",
+            "remark": "unknown"
+        },
+        "MCHC (Mean Corpuscular Hb Conc.)": {
+            "value": 32.8,
+            "unit": "g/dL",
+            "remark": "unknown"
+        },
+        "RDW (RBC distribution width)": {
+            "value": 14.1,
+            "unit": "%",
+            "remark": "unknown"
+        },
+        "MPV (Mean Platelet Volume)": {
+            "value": 7.9,
+            "unit": "fL",
+            "remark": "unknown"
+        },
+        "Neutrophils": {
+            "value": 65.49,
+            "unit": "20",
+            "remark": ""
+        },
+        "Absolute Neutrophils": {
+            "value": 4.96,
+            "unit": "thou/mm3",
+            "remark": "Normal range"
+        },
+        "Eosinophils": {
+            "value": 0.84,
+            "unit": "",
+            "remark": ""
+        },
+        "Absolute Eosinophils": {
+            "value": 0.06,
+            "unit": "thou/mm3",
+            "remark": "unknown"
+        },
+        "Basophils": {
+            "value": 0.34,
+            "unit": "Absolute",
+            "remark": ""
+        },
+        "Absolute Basophils": {
+            "value": 0.03,
+            "unit": "thou/mm3",
+            "remark": "unknown"
+        },
+        "Lymphocytes": {
+            "value": 27.74,
+            "unit": "2",
+            "remark": ""
+        },
+        "Absolute Lymphocytes": {
+            "value": 2.1,
+            "unit": "thou/mm3",
+            "remark": "Value falls within reference range."
+        },
+        "Monocytes": {
+            "value": 5.59,
+            "unit": "1",
+            "remark": ""
+        },
+        "Absolute Monocytes": {
+            "value": 0.42,
+            "unit": "thou/mm3",
+            "remark": "1.00 - 6.00"
+        },
+        "Cholesterol (Total)": {
+            "value": 158.0,
+            "unit": "mg/dL",
+            "remark": "<200.00"
+        },
+        "Triglycerides": {
+            "value": 150.0,
+            "unit": "mg/dL",
+            "remark": ""
+        },
+        "HDL Cholesterol": {
+            "value": 130.0,
+            "unit": "mg/dL",
+            "remark": ""
+        },
+        "VLDL Cholesterol": {
+            "value": 30.0,
+            "unit": "mg/dL",
+            "remark": ""
+        },
+        "LDL Cholesterol": {
+            "value": 100.0,
+            "unit": "mg/dL",
+            "remark": ""
+        },
+        "Bilirubin-Total": {
+            "value": 0.5,
+            "unit": "mg/dL",
+            "remark": "Normal range: 0.30 - 1.20 mg/dL"
+        },
+        "Bilirubin-Conjugated": {
+            "value": 0.1,
+            "unit": "mg/dL",
+            "remark": "<0.2"
+        },
+        "Bilirubin-Unconjugated": {
+            "value": 0.4,
+            "unit": "mg/dL",
+            "remark": "<1.10 mg/dL"
+        },
+        "SGOT (AST)": {
+            "value": 25.0,
+            "unit": "U/L",
+            "remark": "<35"
+        },
+        "SGPT (ALT)": {
+            "value": 28.5,
+            "unit": "U/L",
+            "remark": "<35"
+        },
+        "Alkaline Phosphatase": {
+            "value": 30.0,
+            "unit": "",
+            "remark": ""
+        },
+        "Protein (Total)": {
+            "value": 7.34,
+            "unit": "g/dL",
+            "remark": "Within reference range (6.40 - 8.30 g/dL)"
+        },
+        "Albumin": {
+            "value": 3.5,
+            "unit": "",
+            "remark": ""
+        },
+        "Globulin": {
+            "value": 2.0,
+            "unit": "",
+            "remark": ""
+        },
+        "Plasma Glucose Fasting": {
+            "value": 93.0,
+            "unit": "mg/dL",
+            "remark": "Fasting glucose result is within the normal range (70.00 - 100.00 mg/dL)."
+        },
+        "Urea": {
+            "value": 17.0,
+            "unit": "",
+            "remark": ""
+        },
+        "BUN (Blood Urea Nitrogen)": {
+            "value": 9.25,
+            "unit": "mg/dL",
+            "remark": "Reference range is 6.00 - 20.00 mg/dL"
+        },
+        "Creatinine": {
+            "value": 0.51,
+            "unit": "",
+            "remark": ""
+        },
+        "Vitamin D": {
+            "value": 25.0,
+            "unit": "",
+            "remark": ""
+        },
+        "Vitamin B12": {
+            "value": 359.7,
+            "unit": "Vitamin",
+            "remark": ""
+        },
+        "TSH (Ultrasensitive)": {
+            "value": 0.95,
+            "unit": "\u00b5IU/mL",
+            "remark": "TSH levels are subject to circadian variation, reaching peak levels between 2 - 4 a.m. and at a minimum between 6-10 pm. The variation is of the order of 50%. Hence, time of the day has influence on the measured serum TSH concentrations."
+        },
+        "HbA1C": {
+            "value": 1.0,
+            "unit": "c",
+            "remark": ""
+        },
+        "Estimated Average Glucose (eAG)": {
+            "value": 105.0,
+            "unit": "Interpretation",
+            "remark": ""
+        },
+        "Calcium": {
+            "value": 8.6,
+            "unit": "",
+            "remark": ""
+        }
+    }
+}

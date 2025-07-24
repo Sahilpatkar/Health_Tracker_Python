@@ -1,0 +1,670 @@
+{
+    "context": {
+        "name": "SHASHANK ANANT PATKAR",
+        "date": "2021-02-12T18:08:00",
+        "gender": "MALE",
+        "location": "Chester 2nd Floor, Supreme Pallacio Baner, Pune"
+    },
+    "params": {
+        "Hemoglobin (Hb)": {
+            "value": 15.0,
+            "unit": "g/dL"
+        },
+        "Total Leucocytes (WBC) count": {
+            "value": 7000.0,
+            "unit": "/\u00b5L"
+        },
+        "Platelet count": {
+            "value": 329000.0,
+            "unit": "/\u00b5L"
+        },
+        "Red blood cell (RBC) count": {
+            "value": 5.25,
+            "unit": "x 10^6 /\u00b5L"
+        },
+        "PCV (Packed Cell Volume)": {
+            "value": 45.4,
+            "unit": "%"
+        },
+        "MCV (Mean Corpuscular Volume)": {
+            "value": 86.5,
+            "unit": "fL"
+        },
+        "MCH (Mean Corpuscular Hb)": {
+            "value": 28.5,
+            "unit": "pgms"
+        },
+        "MCHC (Mean Corpuscular Hb Conc.)": {
+            "value": 33.0,
+            "unit": "g/dL"
+        },
+        "RDW (RBC distribution width)": {
+            "value": 13.4,
+            "unit": "%"
+        },
+        "Neutrophils": {
+            "value": 57.0,
+            "unit": "%"
+        },
+        "Absolute Neutrophils": {
+            "value": 3990.0,
+            "unit": "/\u00b5L"
+        },
+        "Eosinophils": {
+            "value": 5.0,
+            "unit": "%"
+        },
+        "Absolute Eosinophils": {
+            "value": 350.0,
+            "unit": "/\u00b5L"
+        },
+        "Basophils": {
+            "value": 0.0,
+            "unit": "%"
+        },
+        "Absolute Basophils": {
+            "value": 0.0,
+            "unit": "/\u00b5L"
+        },
+        "Lymphocytes": {
+            "value": 30.0,
+            "unit": "%"
+        },
+        "Absolute Lymphocytes": {
+            "value": 2100.0,
+            "unit": "/\u00b5L"
+        },
+        "Monocytes": {
+            "value": 8.0,
+            "unit": "%"
+        },
+        "Absolute Monocytes": {
+            "value": 560.0,
+            "unit": "/\u00b5L"
+        },
+        "R.B.C.": {
+            "value": "Normocytic, Normochromic",
+            "unit": ""
+        },
+        "W.B.C.": {
+            "value": "No abnormality detected",
+            "unit": ""
+        },
+        "Platelets": {
+            "value": "Adequate",
+            "unit": ""
+        },
+        "Cholesterol (Total)": {
+            "value": 127.0,
+            "unit": "mg/dL"
+        },
+        "Triglycerides": {
+            "value": 150.0,
+            "unit": "mg/dL"
+        },
+        "HDL Cholesterol": {
+            "value": 50.0,
+            "unit": "mg/dL"
+        },
+        "VLDL Cholesterol": {
+            "value": 17.0,
+            "unit": "mg/dL"
+        },
+        "LDL Cholesterol": {
+            "value": 130.0,
+            "unit": "mg/dL"
+        },
+        "LDL Cholesterol, serum": {
+            "value": 56.0,
+            "unit": "mg/dL"
+        },
+        "Cholesterol(Total)/HDL Cholesterol Ratio": {
+            "value": 2.35,
+            "unit": ""
+        },
+        "LDL Cholesterol/HDL Cholesterol Ratio": {
+            "value": 1.04,
+            "unit": ""
+        },
+        "Apolipoprotein A1, serum": {
+            "value": 165.0,
+            "unit": "mg/dL"
+        },
+        "Apolipoprotein B, serum": {
+            "value": 57.0,
+            "unit": "mg/dL"
+        },
+        "Apolipoprotein A1": {
+            "value": 165.0,
+            "unit": "mg/dL"
+        },
+        "Apolipoprotein B": {
+            "value": 57.0,
+            "unit": "mg/dL"
+        },
+        "Total Cholesterol": {
+            "value": 200.0,
+            "unit": "mg/dL"
+        },
+        "Bilirubin-Total, serum by Diazo method": {
+            "value": 2.43,
+            "unit": "mg/dL"
+        },
+        "Bilirubin-Conjugated, serum by Diazo method": {
+            "value": 0.65,
+            "unit": "mg/dL"
+        },
+        "Bilirubin-Unconjugated, serum by calculation": {
+            "value": 1.78,
+            "unit": "mg/dL"
+        },
+        "SGOT (AST), serum by Enzymatic method": {
+            "value": 29.0,
+            "unit": "U/Lt"
+        },
+        "SGPT (ALT), serum by Enzymatic Method": {
+            "value": 32.0,
+            "unit": "U/Lt"
+        },
+        "Alkaline Phosphatase, serum by pNPP-kinetic": {
+            "value": 77.0,
+            "unit": "U/Lt"
+        },
+        "Protein (total), serum by Biuret method": {
+            "value": 7.15,
+            "unit": "g/dL"
+        },
+        "Albumin, serum by Bromocresol purple method": {
+            "value": 4.51,
+            "unit": "g/dL"
+        },
+        "Globulin, serum by calculation": {
+            "value": 2.64,
+            "unit": "g/dL"
+        },
+        "Glycated Hemoglobin (HbA1C)": {
+            "value": 5.3,
+            "unit": "%"
+        },
+        "Long Term Glycemic Control": {
+            "value": 6.4,
+            "unit": "%"
+        },
+        "Diagnosis Threshold": {
+            "value": 6.5,
+            "unit": "%"
+        },
+        "Therapeutic Goals for Glycemic Control": {
+            "value": 7.0,
+            "unit": "%"
+        },
+        "Adults": {
+            "value": 7.0,
+            "unit": "%"
+        },
+        "Toddlers and Preschoolers": {
+            "value": 8.5,
+            "unit": "%"
+        },
+        "Toddlers and Preschoolers (min)": {
+            "value": 7.5,
+            "unit": "%"
+        },
+        "School age (6-12 yrs)": {
+            "value": 8.0,
+            "unit": "%"
+        },
+        "Adolescents and young adults (13 - 19 yrs)": {
+            "value": 7.5,
+            "unit": "%"
+        },
+        "HbA1C": {
+            "value": "",
+            "unit": "%"
+        },
+        "HbA1c": {
+            "value": "N/A",
+            "unit": "%"
+        },
+        "Plasma Glucose": {
+            "value": 90.0,
+            "unit": "mg/dL"
+        },
+        "Serum Fructosamine": {
+            "value": "varies",
+            "unit": "\u03bcmol/L"
+        },
+        "serum Fructosamine": {
+            "value": 0.0,
+            "unit": "mg/dL"
+        },
+        "hypoglycemia": {
+            "value": 0.0,
+            "unit": "ml/dl"
+        },
+        "patient motivation": {
+            "value": 0.0,
+            "unit": "% adherence"
+        },
+        "adherence": {
+            "value": 0.0,
+            "unit": "%"
+        },
+        "Gamma Glutamyl Transferase (GGT)": {
+            "value": 19.0,
+            "unit": "U/Lt."
+        },
+        "GGT": {
+            "value": 1.0,
+            "unit": "U/L"
+        },
+        "Alkaline Phosphatase": {
+            "value": 0.0,
+            "unit": "U/L"
+        },
+        "Alcoholism": {
+            "value": "",
+            "unit": ""
+        },
+        "Sclerosing cholangitis": {
+            "value": "",
+            "unit": ""
+        },
+        "Primary or secondary neoplasm": {
+            "value": "",
+            "unit": ""
+        },
+        "Medications such as phenytoin and phenobarbitone": {
+            "value": "",
+            "unit": ""
+        },
+        "Plasma Glucose Fasting": {
+            "value": 90.0,
+            "unit": "mg/dL"
+        },
+        "Urea, serum": {
+            "value": 18.0,
+            "unit": "mg/dL"
+        },
+        "BUN (Blood Urea Nitrogen), serum": {
+            "value": 8.41,
+            "unit": "mg/dL"
+        },
+        "Creatinine, serum": {
+            "value": 1.05,
+            "unit": "mg/dL"
+        },
+        "Uric Acid, serum": {
+            "value": 7.1,
+            "unit": "mg/dL"
+        },
+        "uric_acid": {
+            "value": 7.0,
+            "unit": "mg/dL"
+        },
+        "purine_synthesis": {
+            "value": "increased",
+            "unit": "unknown"
+        },
+        "metabolic_disorders": {
+            "value": "inherited",
+            "unit": "unknown"
+        },
+        "dietary_purine_intake": {
+            "value": "excess",
+            "unit": "unknown"
+        },
+        "nucleic_acid_turnover": {
+            "value": "increased",
+            "unit": "unknown"
+        },
+        "malignancy_cytotoxic_drugs": {
+            "value": "present",
+            "unit": "unknown"
+        },
+        "urinary_excretion": {
+            "value": "decreased",
+            "unit": "unknown"
+        },
+        "renal_reabsorption": {
+            "value": "increased",
+            "unit": "unknown"
+        },
+        "uric acid": {
+            "value": 7.0,
+            "unit": "mg/dL"
+        },
+        "purine synthesis": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "dietary purine intake": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "nucleic acid turnover": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "malignancy": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "cytotoxic drugs": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "renal excretion": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "renal reabsorption": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "hepatocellular disease": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "defective renal reabsorption": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "overtreatment of uricemia": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "diagnosis and follow-up of renal failure": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "monitoring patients receiving cytotoxic drugs": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "gout": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "leukemia": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "psoriasis": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "starvation": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "wasting conditions": {
+            "value": 1.0,
+            "unit": "unknown"
+        },
+        "Uric Acid": {
+            "value": 5.0,
+            "unit": "mg/dL"
+        },
+        "Calcium, serum": {
+            "value": 9.6,
+            "unit": "mg/dL"
+        },
+        "Calcium": {
+            "value": 9.5,
+            "unit": "mg/dL"
+        },
+        "Cardiac Arrhythmia Risk": {
+            "value": "Severe Hypercalcemia",
+            "unit": "N/A"
+        },
+        "Hypocalcemia Causes": {
+            "value": "Impaired parathyroid function or vitamin D synthesis",
+            "unit": "N/A"
+        },
+        "Chronic Renal Failure": {
+            "value": "Associated with hypocalcemia due to decreased vitamin D synthesis",
+            "unit": "N/A"
+        },
+        "Parathyroid Hormone (PTH)": {
+            "value": 0.0,
+            "unit": "pg/mL"
+        },
+        "Vitamin D": {
+            "value": 30.0,
+            "unit": "ng/mL"
+        },
+        "Phosphate": {
+            "value": 0.0,
+            "unit": "mg/dL"
+        },
+        "Calcium Ion Concentration": {
+            "value": 0.0,
+            "unit": "mmol/L"
+        },
+        "Hypocalcemia": {
+            "value": 0.0,
+            "unit": "mmol/L"
+        },
+        "Hypercalcemia": {
+            "value": 0.0,
+            "unit": "mmol/L"
+        },
+        "Free T3, serum": {
+            "value": 2.32,
+            "unit": "pg/mL"
+        },
+        "Free T4, serum": {
+            "value": 0.99,
+            "unit": "ng/dL"
+        },
+        "TSH(Ultrasensitive), serum": {
+            "value": 4.25,
+            "unit": "\u00b5IU/mL"
+        },
+        "Free T3": {
+            "value": 2.32,
+            "unit": "pg/mL"
+        },
+        "Free T4": {
+            "value": 1.2,
+            "unit": "ng/dL"
+        },
+        "TSH": {
+            "value": 2.5,
+            "unit": "\u00b5IU/mL"
+        },
+        "Insulin Fasting": {
+            "value": 10.7,
+            "unit": "\u00b5U/mL"
+        },
+        "Vitamin B12, serum": {
+            "value": 945.0,
+            "unit": "pg/mL"
+        },
+        "Vitamin B12": {
+            "value": 500.0,
+            "unit": "pg/mL"
+        },
+        "Serum methylmalonic acid": {
+            "value": "Elevated",
+            "unit": "\u00b5mol/L"
+        },
+        "Serum homocysteine": {
+            "value": "Elevated",
+            "unit": "\u00b5mol/L"
+        },
+        "Active B12 (Holotranscobalamin)": {
+            "value": "Low",
+            "unit": "pmol/L"
+        },
+        "Hemoglobin": {
+            "value": 14.5,
+            "unit": "g/dL"
+        },
+        "Hematocrit": {
+            "value": 45.0,
+            "unit": "%"
+        },
+        "MCV": {
+            "value": 92.0,
+            "unit": "fL"
+        },
+        "MCH": {
+            "value": 31.0,
+            "unit": "pg"
+        },
+        "MCHC": {
+            "value": 34.0,
+            "unit": "g/dL"
+        },
+        "RDW": {
+            "value": 12.5,
+            "unit": "%"
+        },
+        "White Blood Cell Count": {
+            "value": 7.5,
+            "unit": "10^9/L"
+        },
+        "Platelet Count": {
+            "value": 250.0,
+            "unit": "10^9/L"
+        },
+        "25 - OH Vitamin D, serum": {
+            "value": 42.2,
+            "unit": "ng/mL"
+        },
+        "Toxicity possible": {
+            "value": 80.0,
+            "unit": "ng/mL"
+        },
+        "25-hydroxyvitamin D2": {
+            "value": 30.0,
+            "unit": "ng/mL"
+        },
+        "25-hydroxyvitamin D3": {
+            "value": 20.0,
+            "unit": "ng/mL"
+        },
+        "7-dihydrocholesterol conversion": {
+            "value": 2.0,
+            "unit": "mg/L"
+        },
+        "total 25-hydroxyvitamin D (25-OH-VitD) level": {
+            "value": 30.0,
+            "unit": "ng/mL"
+        },
+        "25-OH-VitD": {
+            "value": 50.0,
+            "unit": "ng/mL"
+        },
+        "1,25-OH-VitD": {
+            "value": 20.0,
+            "unit": "pg/mL"
+        },
+        "Creatinine": {
+            "value": 1.0,
+            "unit": "mg/dL"
+        },
+        "eGFR": {
+            "value": 30.0,
+            "unit": "mL/min/1.73m2"
+        },
+        "Phosphorus": {
+            "value": 4.5,
+            "unit": "mg/dL"
+        },
+        "PTH": {
+            "value": 100.0,
+            "unit": "pg/mL"
+        },
+        "Hemoglobin A1c": {
+            "value": 5.7,
+            "unit": "%"
+        },
+        "Fasting Glucose": {
+            "value": 90.0,
+            "unit": "mg/dL"
+        },
+        "Potassium": {
+            "value": 4.2,
+            "unit": "mmol/L"
+        },
+        "Sodium": {
+            "value": 140.0,
+            "unit": "mmol/L"
+        },
+        "BUN": {
+            "value": 16.0,
+            "unit": "mg/dL"
+        },
+        "Folate": {
+            "value": 5.0,
+            "unit": "ng/mL"
+        },
+        "Iron": {
+            "value": 75.0,
+            "unit": "\u00b5g/dL"
+        },
+        "Ferritin": {
+            "value": 100.0,
+            "unit": "ng/mL"
+        },
+        "Quantity Examined": {
+            "value": 5.0,
+            "unit": "ml"
+        },
+        "Appearance": {
+            "value": "Clear",
+            "unit": ""
+        },
+        "Colour": {
+            "value": "Pale yellow",
+            "unit": ""
+        },
+        "pH": {
+            "value": 5.5,
+            "unit": ""
+        },
+        "Protein": {
+            "value": "Absent",
+            "unit": ""
+        },
+        "Glucose": {
+            "value": "Absent",
+            "unit": ""
+        },
+        "Acetone": {
+            "value": "Absent",
+            "unit": "-"
+        },
+        "Bile Pigments": {
+            "value": "Absent",
+            "unit": "-"
+        },
+        "Urobilinogen": {
+            "value": "Not significant",
+            "unit": "-"
+        },
+        "R.B.Cs": {
+            "value": "Absent",
+            "unit": "0 - 2 per hpf"
+        },
+        "Pus cells": {
+            "value": "Occasional",
+            "unit": "0 - 5 per hpf"
+        },
+        "Epithelial cells": {
+            "value": "Occasional",
+            "unit": "0 - 5 per hpf"
+        },
+        "Casts": {
+            "value": "Not Detected",
+            "unit": "-"
+        },
+        "Crystals": {
+            "value": "Not Detected",
+            "unit": "-"
+        }
+    }
+}
