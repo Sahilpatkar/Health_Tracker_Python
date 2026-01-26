@@ -13,7 +13,7 @@ import plotly.express as px
 from dotenv import load_dotenv
 
 from Agents.HealthReport_InformationAgent import extract_context_from_pdf
-from data_to_table import skim_required_parameters
+#from data_to_table import skim_required_parameters
 
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "medical_extractor_project"))
