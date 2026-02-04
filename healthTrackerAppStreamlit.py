@@ -202,38 +202,61 @@ def insert_water_intake(date, water_intake):
 
 # Delete Last Entry
 def delete_last_entry(date, meal_type=None):
+    """Remove the most recent entry for the logged in user."""
     conn = get_db_connection()
     cursor = conn.cursor()
+
     if meal_type:
-        cursor.execute("""
+        # Delete the last food entry for the current user and meal type
+        cursor.execute(
+            """
             DELETE FROM food_intake
-            WHERE date = %s AND meal_type = %s
+            WHERE user = %s AND date = %s AND meal_type = %s
             ORDER BY id DESC LIMIT 1
-        """, (date, meal_type))
+            """,
+            (st.session_state.username, date, meal_type),
+        )
     else:
-        cursor.execute("""
+        # Delete the last water intake entry for the current user
+        cursor.execute(
+            """
             DELETE FROM water_intake
-            WHERE date = %s
-        """, (date,))
+            WHERE user = %s AND date = %s
+            ORDER BY id DESC LIMIT 1
+            """,
+            (st.session_state.username, date),
+        )
+
     conn.commit()
     conn.close()
 
 # Fetch Last 1-Month Data
 def fetch_last_month_data():
+    """Retrieve the last month's records for the logged in user."""
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     one_month_ago = datetime.today() - timedelta(days=30)
 
     # Fetch food_intake
-    cursor.execute("""
-        SELECT * FROM food_intake WHERE date >= %s ORDER BY date DESC
-    """, (one_month_ago,))
+    cursor.execute(
+        """
+        SELECT * FROM food_intake
+        WHERE user = %s AND date >= %s
+        ORDER BY date DESC
+        """,
+        (st.session_state.username, one_month_ago),
+    )
     food_intake = pd.DataFrame(cursor.fetchall())
 
     # Fetch water_intake
-    cursor.execute("""
-        SELECT * FROM water_intake WHERE date >= %s ORDER BY date DESC
-    """, (one_month_ago,))
+    cursor.execute(
+        """
+        SELECT * FROM water_intake
+        WHERE user = %s AND date >= %s
+        ORDER BY date DESC
+        """,
+        (st.session_state.username, one_month_ago),
+    )
     water_intake = pd.DataFrame(cursor.fetchall())
 
     conn.close()
