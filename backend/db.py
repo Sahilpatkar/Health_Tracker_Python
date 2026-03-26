@@ -209,8 +209,28 @@ def setup_database():
         """)
 
         conn.commit()
+        _seed_admin(cursor, conn)
         _seed_exercises(cursor, conn)
         _seed_food_items(cursor, conn)
+
+
+def _seed_admin(cursor, conn):
+    admin_user = os.getenv("ADMIN_USERNAME", "admin")
+    admin_pass = os.getenv("ADMIN_PASSWORD", "admin123")
+    cursor.execute("SELECT userId FROM users WHERE user=%s", (admin_user,))
+    if not cursor.fetchone():
+        cursor.execute(
+            "INSERT INTO users (user, password, role) VALUES (%s, %s, %s)",
+            (admin_user, admin_pass, "admin"),
+        )
+        conn.commit()
+        print(f"Admin user '{admin_user}' created.")
+    else:
+        cursor.execute(
+            "UPDATE users SET password=%s, role='admin' WHERE user=%s",
+            (admin_pass, admin_user),
+        )
+        conn.commit()
 
 
 def _seed_exercises(cursor, conn):

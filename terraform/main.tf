@@ -127,6 +127,8 @@ resource "aws_instance" "app" {
     for s in data.aws_subnets.default.ids : s
   ][0]
 
+  user_data_replace_on_change = true
+
   user_data = templatefile("${path.module}/user_data.sh", {
     ebs_device       = "/dev/xvdf"
     data_mount        = "/data"
@@ -134,7 +136,11 @@ resource "aws_instance" "app" {
     groq_api_key     = var.groq_api_key
     jwt_secret       = var.jwt_secret
     db_password      = var.db_password
-    public_ip        = "" # filled at boot via instance metadata
+    github_repo      = var.github_repo
+    github_pat       = var.github_pat
+    github_branch    = var.github_branch
+    admin_username   = var.admin_username
+    admin_password   = var.admin_password
   })
 
   root_block_device {

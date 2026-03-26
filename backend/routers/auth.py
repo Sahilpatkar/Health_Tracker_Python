@@ -15,7 +15,6 @@ class LoginRequest(BaseModel):
 class RegisterRequest(BaseModel):
     username: str
     password: str
-    role: str = "user"
 
 
 @router.post("/login")
@@ -42,7 +41,7 @@ def register(body: RegisterRequest):
             raise HTTPException(status_code=409, detail="User already exists")
         cursor.execute(
             "INSERT INTO users (user, password, role) VALUES (%s,%s,%s)",
-            (body.username, body.password, body.role),
+            (body.username, body.password, "user"),
         )
         conn.commit()
     return {"message": "Registered successfully"}

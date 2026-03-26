@@ -28,7 +28,9 @@ services:
     volumes:
       - ./uploads:/app/uploads
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+    restart: on-failure
 
   frontend:
     build: ./frontend
@@ -54,6 +56,12 @@ services:
       - "3307:3306"
     volumes:
       - ./MySql_Volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 #volumes:
 #  mysql-data:
 

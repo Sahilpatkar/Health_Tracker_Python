@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from backend.db import setup_database
-from backend.routers import auth, exercises, workouts, food, goals, metrics, body, chat
+from backend.routers import admin, auth, exercises, workouts, food, goals, metrics, body, chat
 
 
 @asynccontextmanager
@@ -28,6 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(exercises.router, prefix="/api/exercises", tags=["exercises"])
 app.include_router(workouts.router, prefix="/api/workouts", tags=["workouts"])

@@ -40,6 +40,27 @@ variable "app_name" {
   default     = "health-tracker"
 }
 
+# --- GitHub (auto-clone on boot) ---
+
+variable "github_repo" {
+  description = "GitHub repo in owner/repo format"
+  type        = string
+  default     = "Sahilpatkar/Health_Tracker_Python"
+}
+
+variable "github_pat" {
+  description = "GitHub Personal Access Token (classic) with 'repo' scope for cloning the private repo"
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "github_branch" {
+  description = "Branch to clone"
+  type        = string
+  default     = "main"
+}
+
 # --- Application secrets (passed into the instance via .env) ---
 
 variable "openai_api_key" {
@@ -68,4 +89,17 @@ variable "db_password" {
   type        = string
   sensitive   = true
   default     = "123456"
+}
+
+variable "admin_username" {
+  description = "Admin user created on first deploy"
+  type        = string
+  default     = "admin"
+}
+
+variable "admin_password" {
+  description = "Admin user password"
+  type        = string
+  sensitive   = true
+  default     = "admin123"
 }

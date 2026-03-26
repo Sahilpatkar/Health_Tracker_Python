@@ -6,25 +6,30 @@ set -euo pipefail
 IP="${1:?Usage: $0 <EC2_PUBLIC_IP> <SSH_KEY_PATH>}"
 KEY="${2:?Usage: $0 <EC2_PUBLIC_IP> <SSH_KEY_PATH>}"
 APP_DIR="/opt/health-tracker"
+SSH_OPTS="-i $KEY -o StrictHostKeyChecking=no"
+
+echo ">>> Ensuring target directory exists on remote ..."
+ssh $SSH_OPTS "ec2-user@$IP" "sudo mkdir -p $APP_DIR && sudo chown -R ec2-user:ec2-user $APP_DIR"
 
 echo ">>> Syncing project to $IP:$APP_DIR ..."
 rsync -avz --progress \
-  -e "ssh -i $KEY -o StrictHostKeyChecking=no" \
+  -e "ssh $SSH_OPTS" \
   --exclude '.git' \
-  --exclude 'MySql_Volume' \
-  --exclude 'node_modules' \
-  --exclude '.terraform' \
+  --exclude 'MySql_Volume/' \
+  --exclude 'node_modules/' \
+  --exclude 'frontend/node_modules/' \
+  --exclude '.terraform/' \
   --exclude '*.tfstate*' \
-  --exclude '__pycache__' \
+  --exclude '__pycache__/' \
   --exclude '.env' \
-  ../ "ec2-user@$IP:/tmp/health-tracker-src/"
+  --exclude 'terraform/' \
+  --exclude 'uploads/' \
+  --exclude '.cursor/' \
+  --exclude '.streamlit/secrets.toml' \
+  --exclude 'Agents/__pycache__/' \
+  ../ "ec2-user@$IP:$APP_DIR/"
 
-echo ">>> Moving files into $APP_DIR and starting services ..."
-ssh -i "$KEY" -o StrictHostKeyChecking=no "ec2-user@$IP" <<REMOTE
-  sudo cp -r /tmp/health-tracker-src/* $APP_DIR/
-  sudo chown -R ec2-user:ec2-user $APP_DIR
-  cd $APP_DIR
-  docker-compose up -d --build
-REMOTE
+echo ">>> Starting services ..."
+ssh $SSH_OPTS "ec2-user@$IP" "cd $APP_DIR && docker-compose up -d --build"
 
 echo ">>> Deploy complete. Frontend: http://$IP:3000  API: http://$IP:8000/docs"
