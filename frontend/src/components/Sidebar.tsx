@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import {
   Dumbbell, Utensils, TrendingUp, Camera,
-  Settings, ShieldCheck, LogOut, ChevronLeft, ChevronRight,
+  Settings, ShieldCheck, Users, LogOut, ChevronLeft, ChevronRight,
   LayoutDashboard, Apple, MessageCircle, X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ const navItems = [
 ];
 
 const adminItems = [
+  { to: '/admin/users', icon: Users, label: 'User data' },
   { to: '/admin/exercises', icon: ShieldCheck, label: 'Exercise Catalog' },
 ];
 

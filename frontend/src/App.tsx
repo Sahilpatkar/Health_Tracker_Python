@@ -14,6 +14,7 @@ const ProgressDashboard = lazy(() => import('./pages/ProgressDashboard'));
 const BodyProgress = lazy(() => import('./pages/BodyProgress'));
 const Settings = lazy(() => import('./pages/Settings'));
 const AdminExercises = lazy(() => import('./pages/AdminExercises'));
+const AdminUsers = lazy(() => import('./pages/AdminUsers'));
 const Chat = lazy(() => import('./pages/Chat'));
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -66,6 +67,7 @@ export default function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="chat" element={<Chat />} />
             <Route path="admin/exercises" element={<AdminRoute><AdminExercises /></AdminRoute>} />
+            <Route path="admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
           </Route>
         </Routes>
       </BrowserRouter>

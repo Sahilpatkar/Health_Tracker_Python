@@ -129,6 +129,12 @@ resource "aws_instance" "app" {
 
   user_data_replace_on_change = true
 
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+  }
+
   user_data = templatefile("${path.module}/user_data.sh", {
     ebs_device       = "/dev/xvdf"
     data_mount        = "/data"

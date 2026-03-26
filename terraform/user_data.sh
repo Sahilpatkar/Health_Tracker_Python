@@ -8,24 +8,22 @@ echo ">>> Starting Health Tracker bootstrap"
 # 1. System packages
 # -------------------------------------------------------------------
 dnf update -y
-dnf install -y docker git
+dnf install -y docker git rsync
 
 # -------------------------------------------------------------------
-# 2. Docker, Docker Compose & Buildx
+# 2. Docker, Docker Compose & Buildx (pinned versions for reliability)
 # -------------------------------------------------------------------
 systemctl enable docker
 systemctl start docker
 usermod -aG docker ec2-user
 
-# Install Docker Compose v2 standalone
-COMPOSE_VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
+COMPOSE_VERSION="v2.32.4"
 curl -L "https://github.com/docker/compose/releases/download/$${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" \
   -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-# Install Docker Buildx plugin (required by Compose for building images)
 mkdir -p /usr/local/lib/docker/cli-plugins
-BUILDX_VERSION=$(curl -s https://api.github.com/repos/docker/buildx/releases/latest | grep tag_name | cut -d '"' -f 4)
+BUILDX_VERSION="v0.21.1"
 curl -L "https://github.com/docker/buildx/releases/download/$${BUILDX_VERSION}/buildx-$${BUILDX_VERSION}.linux-amd64" \
   -o /usr/local/lib/docker/cli-plugins/docker-buildx
 chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
@@ -122,7 +120,8 @@ ENVFILE
 # -------------------------------------------------------------------
 # 6. Docker-compose override – point volumes to EBS mount
 # -------------------------------------------------------------------
-INSTANCE_PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4 || echo "127.0.0.1")
+IMDS_TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 300" || true)
+INSTANCE_PUBLIC_IP=$(curl -s -H "X-aws-ec2-metadata-token: $${IMDS_TOKEN}" http://169.254.169.254/latest/meta-data/public-ipv4 || echo "127.0.0.1")
 
 cat > "$APP_DIR/docker-compose.override.yml" <<OVERRIDE
 services:
@@ -143,12 +142,7 @@ services:
 OVERRIDE
 
 # -------------------------------------------------------------------
-# 7. Install rsync (useful for future deploy.sh runs)
-# -------------------------------------------------------------------
-dnf install -y rsync
-
-# -------------------------------------------------------------------
-# 8. Start services
+# 7. Start services
 # -------------------------------------------------------------------
 chown -R ec2-user:ec2-user "$APP_DIR"
 
