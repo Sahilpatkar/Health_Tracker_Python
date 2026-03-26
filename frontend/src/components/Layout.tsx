@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu } from 'lucide-react';
 import Sidebar from './Sidebar';
+import OfflineBanner from './OfflineBanner';
 
 const pageVariants = {
   initial: { opacity: 0, x: 20 },
@@ -19,6 +20,8 @@ export default function Layout() {
       <Sidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
 
       <div className="flex-1 flex flex-col min-w-0">
+        <OfflineBanner />
+
         {/* Mobile top bar */}
         <header className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-[var(--color-surface)] border-b border-[var(--color-border)]">
           <button
