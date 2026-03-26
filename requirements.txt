@@ -1,3 +1,17 @@
+# =============================================================================
+# Health_Tracker_Python — Python 3.11+ (see Dockerfile)
+# =============================================================================
+# Core — Streamlit app + Fitness V1 (healthTrackerAppStreamlit.py, fitness_metrics.py):
+#   streamlit, pandas, numpy, plotly, mysql-connector-python, python-dotenv,
+#   openpyxl (food_items.xlsx), pillow (body photos / Streamlit images)
+# Health Report PDF — Agents/, medical_extractor_project/:
+#   pydantic-ai, langchain-*, langsmith, groq, PyMuPDF, openai, tiktoken, ...
+# Optional — docker-compose Kafka: confluent-kafka, kafka-python-ng, avro-python3
+# Optional — healthTrackerAppGradio.py: gradio (last line in this file)
+# Note: Remaining pins are a full resolved environment; trim only after testing imports.
+# Install: pip install -r requirements.txt
+# =============================================================================
+
 aiohappyeyeballs==2.6.1
 aiohttp==3.11.18
 aiosignal==1.3.2

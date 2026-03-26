@@ -1,0 +1,69 @@
+name,muscle_group,equipment
+Barbell Bench Press,chest,barbell
+Incline Barbell Bench Press,chest,barbell
+Decline Barbell Bench Press,chest,barbell
+Dumbbell Bench Press,chest,dumbbell
+Incline Dumbbell Press,chest,dumbbell
+Dumbbell Fly,chest,dumbbell
+Cable Fly,chest,cable
+Machine Chest Press,chest,machine
+Pec Deck,chest,machine
+Push Up,chest,bodyweight
+Chest Dip,chest,bodyweight
+Pull Up,back,bodyweight
+Chin Up,back,bodyweight
+Lat Pulldown,back,cable
+Barbell Row,back,barbell
+Dumbbell Row,back,dumbbell
+Cable Row,back,cable
+Seated Cable Row,back,cable
+T-Bar Row,back,barbell
+Face Pull,back,cable
+Deadlift,back,barbell
+Barbell Squat,legs,barbell
+Front Squat,legs,barbell
+Leg Press,legs,machine
+Leg Extension,legs,machine
+Leg Curl,legs,machine
+Romanian Deadlift,legs,barbell
+Bulgarian Split Squat,legs,dumbbell
+Walking Lunge,legs,dumbbell
+Goblet Squat,legs,dumbbell
+Hack Squat,legs,machine
+Hip Thrust,legs,barbell
+Standing Calf Raise,legs,machine
+Seated Calf Raise,legs,machine
+Overhead Press,shoulders,barbell
+Dumbbell Shoulder Press,shoulders,dumbbell
+Lateral Raise,shoulders,dumbbell
+Front Raise,shoulders,dumbbell
+Rear Delt Fly,shoulders,dumbbell
+Arnold Press,shoulders,dumbbell
+Upright Row,shoulders,barbell
+Barbell Shrug,shoulders,barbell
+Dumbbell Shrug,shoulders,dumbbell
+Barbell Curl,arms,barbell
+Dumbbell Curl,arms,dumbbell
+Hammer Curl,arms,dumbbell
+Preacher Curl,arms,barbell
+Concentration Curl,arms,dumbbell
+EZ Bar Curl,arms,barbell
+Tricep Pushdown,arms,cable
+Overhead Tricep Extension,arms,dumbbell
+Skull Crusher,arms,barbell
+Close-Grip Bench Press,arms,barbell
+Tricep Dip,arms,bodyweight
+Cable Curl,arms,cable
+Plank,core,bodyweight
+Crunch,core,bodyweight
+Russian Twist,core,bodyweight
+Hanging Leg Raise,core,bodyweight
+Cable Crunch,core,cable
+Ab Wheel Rollout,core,bodyweight
+Woodchop,core,cable
+Leg Raise,core,bodyweight
+Clean and Press,full_body,barbell
+Thruster,full_body,barbell
+Burpee,full_body,bodyweight
+Kettlebell Swing,full_body,kettlebell
+Turkish Get Up,full_body,kettlebell

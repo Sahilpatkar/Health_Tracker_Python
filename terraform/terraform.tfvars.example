@@ -1,0 +1,13 @@
+aws_region    = "us-east-1"
+aws_profile   = "your-aws-cli-profile"
+instance_type    = "t3.small"
+ebs_size_gb      = 20
+key_name = "my-ec2-keypair"
+# Optional: restrict SSH/Kafka UI (default is 0.0.0.0/0). Must be valid CIDR, e.g. your public IP:
+# allowed_ssh_cidrs = ["203.0.113.50/32"]
+
+# Secrets – use terraform.tfvars (git-ignored) or pass via CLI / env vars
+# openai_api_key = ""
+# groq_api_key   = ""
+# jwt_secret     = "some-random-string"
+# db_password    = "strong-password"

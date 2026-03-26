@@ -1,0 +1,18 @@
+.env
+.streamlit/secrets.toml
+__pycache__/
+*.pyc
+.Python
+venv/
+.venv/
+uploads/
+MySql_Volume/
+datastore/
+HealthReport/
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfvars
+terraform/.terraform.lock.hcl
