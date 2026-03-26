@@ -5,7 +5,9 @@ export const saveBodyMetrics = (data: { date: string; weight_kg: number; waist_c
 
 export const getBodyMetrics = () => api.get('/body/metrics');
 
-export const uploadPhoto = (formData: FormData) =>
-  api.post('/body/photos', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+/** Do not set Content-Type manually — the browser must add the multipart boundary (required for mobile Safari). */
+export const uploadPhoto = (formData: FormData) => api.post('/body/photos', formData);
 
 export const getPhotos = () => api.get('/body/photos');
+
+export const deletePhoto = (photoId: number) => api.delete(`/body/photos/${photoId}`);

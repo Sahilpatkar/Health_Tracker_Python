@@ -3,8 +3,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import DashboardCard from '../components/DashboardCard';
-import { saveBodyMetrics, getBodyMetrics, uploadPhoto, getPhotos } from '../api/body';
-import { Camera, X } from 'lucide-react';
+import { saveBodyMetrics, getBodyMetrics, uploadPhoto, getPhotos, deletePhoto } from '../api/body';
+import { Camera, X, Trash2 } from 'lucide-react';
 
 export default function BodyProgress() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -30,11 +30,37 @@ export default function BodyProgress() {
     const file = e.target.files?.[0];
     if (!file) return;
     const fd = new FormData();
-    fd.append('file', file);
+    fd.append('file', file, file.name || 'photo.jpg');
     fd.append('taken_date', date);
     fd.append('notes', '');
-    await uploadPhoto(fd);
-    toast.success('Photo uploaded!'); load();
+    const tid = toast.loading('Uploading…');
+    try {
+      await uploadPhoto(fd);
+      toast.success('Photo uploaded!', { id: tid });
+      load();
+    } catch (err: unknown) {
+      const ax = err as { response?: { status?: number; data?: { detail?: string } } };
+      const msg =
+        ax.response?.status === 413
+          ? 'Photo is too large for the server. Try a smaller image.'
+          : ax.response?.data?.detail || 'Upload failed. Check your connection and try again.';
+      toast.error(msg, { id: tid });
+    } finally {
+      e.target.value = '';
+    }
+  };
+
+  const handleDeletePhoto = async (id: number, filePath: string) => {
+    if (!window.confirm('Delete this photo? This cannot be undone.')) return;
+    try {
+      await deletePhoto(id);
+      toast.success('Photo deleted');
+      if (lightbox === filePath) setLightbox(null);
+      load();
+    } catch (err: unknown) {
+      const ax = err as { response?: { data?: { detail?: string } } };
+      toast.error(ax.response?.data?.detail || 'Could not delete photo');
+    }
   };
 
   return (
@@ -60,10 +86,19 @@ export default function BodyProgress() {
         <DashboardCard title="Upload Photo" delay={0.1}>
           <div className="flex flex-col items-center gap-4">
             <Camera size={48} className="text-[var(--color-text-muted)]" />
-            <label className="cursor-pointer px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors">
-              Choose Photo
-              <input type="file" accept="image/*" onChange={handleUpload} className="hidden" />
+            <label
+              htmlFor="body-photo-upload"
+              className="cursor-pointer px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-colors"
+            >
+              Choose or take photo
             </label>
+            <input
+              id="body-photo-upload"
+              type="file"
+              accept="image/*"
+              className="sr-only"
+              onChange={handleUpload}
+            />
           </div>
         </DashboardCard>
       </div>
@@ -102,8 +137,23 @@ export default function BodyProgress() {
         <DashboardCard title="Photos" delay={0.4}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {photos.map((p: any) => (
-              <motion.div key={p.id} whileHover={{ scale: 1.03 }} className="cursor-pointer"
-                          onClick={() => setLightbox(p.file_path)}>
+              <motion.div
+                key={p.id}
+                whileHover={{ scale: 1.03 }}
+                className="relative cursor-pointer group"
+                onClick={() => setLightbox(p.file_path)}
+              >
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void handleDeletePhoto(p.id, p.file_path);
+                  }}
+                  className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-black/60 text-white md:opacity-0 md:group-hover:opacity-100 hover:bg-red-600 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white transition-opacity"
+                  aria-label="Delete photo"
+                >
+                  <Trash2 size={16} />
+                </button>
                 <img src={p.file_path} alt={p.notes || p.taken_date}
                      className="rounded-xl w-full h-40 object-cover border border-[var(--color-border)]" />
                 <p className="text-xs text-[var(--color-text-muted)] mt-1 text-center">{p.taken_date}</p>

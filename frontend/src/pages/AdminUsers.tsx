@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { X } from 'lucide-react';
 import {
   listAdminUsers,
   getAdminUserFood,
@@ -44,6 +45,13 @@ function fmt(v: unknown): string {
   return String(v);
 }
 
+type AdminPhotoRow = {
+  id: number;
+  taken_date: string;
+  file_path: string;
+  notes?: string | null;
+};
+
 export default function AdminUsers() {
   const [users, setUsers] = useState<{ userId: number; user: string; role: string }[]>([]);
   const [summary, setSummary] = useState<Record<string, number> | null>(null);
@@ -52,6 +60,11 @@ export default function AdminUsers() {
   const [foodDate, setFoodDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState<unknown>(null);
+  const [photoLightbox, setPhotoLightbox] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPhotoLightbox(null);
+  }, [selected, tab]);
 
   useEffect(() => {
     listAdminUsers()
@@ -198,10 +211,79 @@ export default function AdminUsers() {
             {payload == null ? 'No goals row for this user.' : fmt(payload)}
           </div>
         )}
-        {selected && !loading && tab !== 'goals' && tab !== 'workouts' && Array.isArray(payload) && payload.length === 0 && (
+        {selected && !loading && tab !== 'goals' && tab !== 'workouts' && tab !== 'photos' && Array.isArray(payload) && payload.length === 0 && (
           <p className="text-sm text-[var(--color-text-muted)]">No records.</p>
         )}
-        {selected && !loading && tab !== 'goals' && tab !== 'workouts' && Array.isArray(payload) && payload.length > 0 && (
+        {selected && !loading && tab === 'photos' && Array.isArray(payload) && (
+          <div className="space-y-4">
+            {(payload as AdminPhotoRow[]).length === 0 ? (
+              <p className="text-sm text-[var(--color-text-muted)]">No records.</p>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {(payload as AdminPhotoRow[]).map((p) => (
+                  <div
+                    key={p.id}
+                    className="rounded-xl border border-[var(--color-border)] overflow-hidden bg-[var(--color-surface-dim)]"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setPhotoLightbox(p.file_path)}
+                      className="block w-full aspect-square focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                      aria-label={`View photo from ${p.taken_date}`}
+                    >
+                      <img src={p.file_path} alt="" className="w-full h-full object-cover" loading="lazy" />
+                    </button>
+                    <div className="p-2 space-y-1.5">
+                      <p className="text-xs text-[var(--color-text-muted)]">{p.taken_date}</p>
+                      {p.notes ? <p className="text-xs line-clamp-2">{p.notes}</p> : null}
+                      <a
+                        href={p.file_path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                      >
+                        Open in new tab
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <AnimatePresence>
+              {photoLightbox && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+                  onClick={() => setPhotoLightbox(null)}
+                >
+                  <button
+                    type="button"
+                    className="absolute top-4 right-4 text-white p-2 rounded-lg hover:bg-white/10"
+                    aria-label="Close"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPhotoLightbox(null);
+                    }}
+                  >
+                    <X size={28} />
+                  </button>
+                  <motion.img
+                    src={photoLightbox}
+                    initial={{ scale: 0.92 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0.92 }}
+                    alt=""
+                    className="max-w-full max-h-[85vh] rounded-2xl object-contain"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+        {selected && !loading && tab !== 'goals' && tab !== 'workouts' && tab !== 'photos' && Array.isArray(payload) && payload.length > 0 && (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse min-w-[640px]">
               <thead>

@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, Depends, UploadFile, File, Form
+from fastapi import APIRouter, Depends, UploadFile, File, Form, HTTPException, status
 from pydantic import BaseModel
 from typing import Optional
 
@@ -72,3 +72,41 @@ def get_photos(user: dict = Depends(get_current_user)):
             (user["username"],),
         )
         return cursor.fetchall()
+
+
+@router.delete("/photos/{photo_id}")
+def delete_photo(photo_id: int, user: dict = Depends(get_current_user)):
+    uploads_root = os.path.normpath(
+        os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "uploads")
+    )
+    project_root = os.path.dirname(uploads_root)
+
+    with get_conn() as conn:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT id, file_path FROM body_photos WHERE id=%s AND user=%s",
+            (photo_id, user["username"]),
+        )
+        row = cursor.fetchone()
+        if not row:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found")
+
+        rel = (row["file_path"] or "").lstrip("/")
+        if not rel.startswith("uploads/"):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid stored path")
+
+        abs_path = os.path.normpath(os.path.join(project_root, rel))
+        user_dir = os.path.normpath(os.path.join(uploads_root, user["username"]))
+        if abs_path != user_dir and not abs_path.startswith(user_dir + os.sep):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid path")
+
+        if os.path.isfile(abs_path):
+            try:
+                os.remove(abs_path)
+            except OSError:
+                pass
+
+        cursor.execute("DELETE FROM body_photos WHERE id=%s AND user=%s", (photo_id, user["username"]))
+        conn.commit()
+
+    return {"message": "Deleted"}

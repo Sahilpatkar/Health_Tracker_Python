@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import {
-  Dumbbell, Utensils, TrendingUp, Camera,
+  Dumbbell, Utensils, TrendingUp, PersonStanding,
   Settings, ShieldCheck, Users, LogOut, ChevronLeft, ChevronRight,
   LayoutDashboard, Apple, MessageCircle, X,
 } from 'lucide-react';
@@ -14,7 +14,7 @@ const navItems = [
   { to: '/nutrition', icon: Apple, label: 'Nutrition Dashboard' },
   { to: '/nutrition/log', icon: Utensils, label: 'Log Food & Water' },
   { to: '/progress', icon: TrendingUp, label: 'Progress' },
-  { to: '/body', icon: Camera, label: 'Body Progress' },
+  { to: '/body', icon: PersonStanding, label: 'Body Progress' },
   { to: '/settings', icon: Settings, label: 'Goals & Settings' },
   { to: '/chat', icon: MessageCircle, label: 'AI Trainer' },
 ];
